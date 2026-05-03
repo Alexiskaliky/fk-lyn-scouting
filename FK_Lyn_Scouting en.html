@@ -877,6 +877,8 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
 .readonly-mode .cat-section { pointer-events:none !important; }
 .readonly-mode .verdict-select { pointer-events:none !important; }
 .readonly-mode .print-btn { display:none !important; }
+#ro-print-btn { display:none !important; }
+@media screen and (max-width: 768px) { #ro-print-btn { display:inline-block !important; } }
 .readonly-mode-back { display:inline-flex;align-items:center;gap:6px;padding:6px 14px;margin:0.75rem 2rem;background:var(--gray-bg);border:1px solid var(--gray-border);border-radius:3px;font-family:'Georgia',serif;font-size:12px;color:var(--gray-text);cursor:pointer;transition:all 0.15s; }
 .readonly-mode-back:hover{background:var(--white);border-color:var(--navy);color:var(--navy)}
 
