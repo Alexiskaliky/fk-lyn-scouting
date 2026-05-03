@@ -2738,6 +2738,33 @@ function openReportFromList(ri) {
   window._returnToReportsTab = true;
 }
 
+
+function mobilePrint(){
+  var printStyle = document.createElement('style');
+  printStyle.id = 'mobile-print-style';
+  printStyle.innerHTML = '@media print{'
+    + '#home{display:none!important}'
+    + '#report-modal{display:none!important}'
+    + '#readonly-back-bar{display:none!important}'
+    + '.back-btn{display:none!important}'
+    + '.print-btn{display:none!important}'
+    + '.save-btn{display:none!important}'
+    + '.save-msg{display:none!important}'
+    + '[id^="fiche-"]{display:none!important}'
+    + '}';
+  ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el&&el.style.display!=='none'){
+      printStyle.innerHTML+='@media print{#'+id+'{display:block!important}}';
+    }
+  });
+  document.head.appendChild(printStyle);
+  window.print();
+  setTimeout(function(){
+    var s=document.getElementById('mobile-print-style');
+    if(s)s.remove();
+  },1000);
+}
 </script>
 <div id="report-modal"><div class="report-modal-inner"><div class="report-modal-header"><span class="report-modal-title" id="report-modal-title">Report</span><button class="report-modal-close" onclick="closeReport()">&#x2715;</button></div><div id="report-modal-body" style="padding:1.5rem">Loading...</div><button class="modal-pdf-btn" onclick="window.print()">Print / Save as PDF</button></div></div>
 <datalist id="player-names-list"></datalist>
