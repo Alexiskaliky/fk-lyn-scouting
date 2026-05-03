@@ -2432,7 +2432,16 @@ function populateFiche(data,poste,rtype,ficheId){
   var ficheEl = document.getElementById(ficheId);
   if(ficheEl) ficheEl.classList.add('readonly-mode');
 
-  // Print button triggers mobilePrint() manually - no auto-print
+  // Auto-print on desktop only, not mobile
+  var _isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(!_isMobile){
+    var _printHandler = function(){
+      window.removeEventListener('afterprint', _printHandler);
+      returnToPlayers();
+    };
+    window.addEventListener('afterprint', _printHandler);
+    setTimeout(function(){ window.print(); }, 400);
+  }
 }
 
 function returnToPlayers(){
