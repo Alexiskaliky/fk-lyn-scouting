@@ -212,6 +212,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
   .sec-ball .eval-section-header { background: var(--navy); border-left: 4px solid var(--amber-dark); }
   .sec-ment .eval-section-header { background: var(--navy); border-left: 4px solid var(--purple-dark); }
   .sec-mkt  .eval-section-header { background: var(--navy); border-left: 4px solid var(--coral-dark); }
+.sec-mkt-w .eval-section-header { background: var(--navy); border-left: 4px solid var(--coral-dark); }
 
   .criteria-row {
     display: grid;
@@ -892,6 +893,19 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
 .reports-panel { overflow:hidden; }
 .eval-section + .eval-section { margin-top:0; }
 
+
+/* ── REPORTS TAB ─────────────────────────────────── */
+.report-card{background:var(--white);border:1px solid var(--gray-border);border-radius:6px;padding:1rem;margin-bottom:8px;cursor:pointer;transition:all 0.15s}
+.report-card:hover{border-color:var(--navy);background:#F8F9FF}
+.report-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.report-card-player{font-size:14px;font-weight:bold;color:var(--text)}
+.report-card-score{font-size:20px;font-weight:bold;font-family:Arial,sans-serif}
+.report-card-meta{font-size:12px;color:var(--gray-text);margin-top:2px}
+.report-card-verdict{font-size:12px;color:var(--text);margin-top:4px;font-style:italic}
+.period-btn{padding:4px 12px;border:1px solid var(--gray-border);border-radius:20px;background:var(--white);font-family:'Georgia',serif;font-size:12px;color:var(--gray-text);cursor:pointer;transition:all 0.15s}
+.period-btn:hover{border-color:var(--navy);color:var(--navy)}.period-btn.active{background:var(--navy);border-color:var(--navy);color:var(--white)}
+.reports-count{font-size:11px;color:var(--gray-text);font-style:italic;margin-bottom:8px}
+
 </style>
 </head>
 <body>
@@ -903,7 +917,8 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     <p>Recruitment &amp; Player Development U17–U21</p>
   </div>
   <div class="home-body">
-    <div class="home-tabs"><div class="home-tab active" onclick="switchTab('scouting',this)">&#x1F4CB; New report</div><div class="home-tab" onclick="switchTab('players',this)">&#x1F5C3;&#xFE0F; Players</div></div>
+    <div class="home-tabs"><div class="home-tab active" onclick="switchTab('scouting',this)">&#x1F4CB; New report</div><div class="home-tab" onclick="switchTab('players',this)">&#x1F5C3;&#xFE0F; Players</div>
+      <div class="home-tab" onclick="switchTab('reports',this)">&#x1F4C5; Reports</div></div>
     <div class="tab-panel active" id="tab-scouting">
     <div class="home-step-title" style="margin-top:1.25rem">1. Select position</div>
     <div class="postes-grid">
@@ -935,10 +950,72 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
         <input type="text" class="db-search" id="db-search" placeholder="Search a player by name..." oninput="filterPlayers()">
         <div class="db-filters">
           <div class="filter-group"><span class="filter-label">Position</span><div class="filter-btns"><button class="filter-btn active" onclick="setFilter('pos','all',this)">All</button><button class="filter-btn" onclick="setFilter('pos','Centre-back',this)">Centre-back</button><button class="filter-btn" onclick="setFilter('pos','Winger',this)">Winger</button><button class="filter-btn" onclick="setFilter('pos','Full-back',this)">Full-back</button><button class="filter-btn" onclick="setFilter('pos','Midfielder',this)">Midfielder</button><button class="filter-btn" onclick="setFilter('pos','Striker',this)">Striker</button></div></div>
-          <div class="filter-group"><span class="filter-label">Status</span><div class="filter-btns"><button class="filter-btn active" onclick="setFilter('status','all',this)">All</button><button class="filter-btn" onclick="setFilter('status','Monitoring',this)">Monitoring</button><button class="filter-btn" onclick="setFilter('status','Recruited',this)">Recruited</button><button class="filter-btn" onclick="setFilter('status','Rejected',this)">Rejected</button></div></div>
+          <div class="filter-group">
+            <span class="filter-label">Born</span>
+            <div class="filter-btns">
+              <button class="filter-btn active" onclick="setFilter('year','all',this)">All</button>
+              <button class="filter-btn" onclick="setFilter('year','2012',this)">2012</button>
+              <button class="filter-btn" onclick="setFilter('year','2011',this)">2011</button>
+              <button class="filter-btn" onclick="setFilter('year','2010',this)">2010</button>
+              <button class="filter-btn" onclick="setFilter('year','2009',this)">2009</button>
+              <button class="filter-btn" onclick="setFilter('year','2008',this)">2008</button>
+              <button class="filter-btn" onclick="setFilter('year','2007',this)">2007</button>
+              <button class="filter-btn" onclick="setFilter('year','2006',this)">2006</button>
+              <button class="filter-btn" onclick="setFilter('year','2005',this)">2005</button>
+              <button class="filter-btn" onclick="setFilter('year','2004',this)">2004</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Verdict</span>
+            <div class="filter-btns">
+              <button class="filter-btn active" onclick="setFilter('verdict','all',this)">All</button>
+              <button class="filter-btn" onclick="setFilter('verdict','Priority recruitment',this)">Priority recruitment</button>
+              <button class="filter-btn" onclick="setFilter('verdict','Monitor',this)">Monitor</button>
+              <button class="filter-btn" onclick="setFilter('verdict','Long-term watch',this)">Long-term watch</button>
+              <button class="filter-btn" onclick="setFilter('verdict','No interest',this)">No interest</button>
+              <button class="filter-btn" onclick="setFilter('verdict','Move to recruitment stage',this)">Move to recruitment</button>
+              <button class="filter-btn" onclick="setFilter('verdict','Continue monitoring',this)">Continue monitoring</button>
+              <button class="filter-btn" onclick="setFilter('verdict','Put on hold',this)">Put on hold</button>
+              <button class="filter-btn" onclick="setFilter('verdict','Stop monitoring',this)">Stop monitoring</button>
+            </div>
+          </div>
+          
         </div>
         <div id="db-stats" class="db-stats"></div>
         <div id="db-content"><div class="db-loading">Loading players...</div></div>
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-reports">
+      <div style="margin-top:1.25rem">
+        <div style="margin-bottom:1rem">
+          <div class="report-filters-row">
+            <span class="report-filter-label">Period</span>
+            <button class="period-btn active" onclick="setReportPeriod('week',this)">This week</button>
+            <button class="period-btn" onclick="setReportPeriod('month',this)">This month</button>
+            <button class="period-btn" onclick="setReportPeriod('all',this)">All</button>
+          </div>
+          <div class="report-filters-row">
+            <span class="report-filter-label">Type</span>
+            <button class="period-btn active" onclick="setReportType('all',this)">All</button>
+            <button class="period-btn" onclick="setReportType('First observation',this)">First obs.</button>
+            <button class="period-btn" onclick="setReportType('Follow-up',this)">Follow-up</button>
+          </div>
+          <div class="report-filters-row">
+            <span class="report-filter-label">Position</span>
+            <button class="period-btn active" onclick="setReportPos('all',this)">All</button>
+            <button class="period-btn" onclick="setReportPos('Centre-back',this)">Centre-back</button>
+            <button class="period-btn" onclick="setReportPos('Winger',this)">Winger</button>
+          </div>
+          <div class="report-filters-row">
+            <span class="report-filter-label">Scout</span>
+            <button class="period-btn active" onclick="setReportScout('all',this)">All</button>
+            <button class="period-btn" onclick="setReportScout('Alexis',this)">Alexis</button>
+            <button class="period-btn" style="opacity:0.4;cursor:not-allowed" disabled>Scout 2</button>
+            <button class="period-btn" style="opacity:0.4;cursor:not-allowed" disabled>Scout 3</button>
+          </div>
+        </div>
+        <div id="reports-count" class="reports-count"></div>
+        <div id="reports-list"><div class="db-loading">Loading reports...</div></div>
       </div>
     </div>
   </div>
@@ -977,19 +1054,19 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     </div>
     <div class="score-sep"></div>
     <div class="score-mini">
-      <div class="score-mini-label">Jeu ballon</div>
+      <div class="score-mini-label">Ball play</div>
       <div class="score-mini-val"><span id="sc-ball">0</span><span class="score-mini-max">/15</span></div>
       <div class="score-mini-bar"><div class="score-mini-fill" id="bar-ball" style="width:0%;background:#854F0B"></div></div>
     </div>
     <div class="score-sep"></div>
     <div class="score-mini">
-      <div class="score-mini-label">Mental</div>
+      <div class="score-mini-label">Mentality</div>
       <div class="score-mini-val"><span id="sc-ment">0</span><span class="score-mini-max">/10</span></div>
       <div class="score-mini-bar"><div class="score-mini-fill" id="bar-ment" style="width:0%;background:#3C3489"></div></div>
     </div>
     <div class="score-sep"></div>
     <div class="score-mini">
-      <div class="score-mini-label">Marché</div>
+      <div class="score-mini-label">Market</div>
       <div class="score-mini-val"><span id="sc-mkt">0</span><span class="score-mini-max">/5</span></div>
       <div class="score-mini-bar"><div class="score-mini-fill" id="bar-mkt" style="width:0%;background:#993C1D"></div></div>
     </div>
@@ -1049,6 +1126,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
         <input type="text" id="f-nat" placeholder="e.g. Croatian">
       </div>
     </div>
+
 
     <!-- PHYSIQUE -->
     <div class="eval-section sec-phys">
@@ -1248,7 +1326,9 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
       </div>
       <div class="comment-row">
         <label>Comments — Market potential</label>
-        <textarea id="com-mkt" placeholder="Contract context, estimated cost, interest from other clubs..."></textarea>
+        <textarea id="com-mkt" placeholder="Contract context, estimated cost, agent, Transfermarkt link, Instagram..."></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:8px;border:1px solid var(--gray-border);border-radius:3px;overflow:hidden">
+        </div>
       </div>
     </div>
 
@@ -1288,7 +1368,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     </div>
 
         <div id="save-msg-sc-cb" class="save-msg"></div>
-    <button class="save-btn" id="save-btn-sc-cb" onclick="saveReport('sc','cb')">Save report to Airtable</button>
+    <button class="save-btn" id="save-btn-sc-cb" onclick="event.stopPropagation();saveReport('sc','cb')">Save report to Airtable</button>
 <button class="print-btn" onclick="window.print()">
       Print / Export as PDF &nbsp;→&nbsp; File › Print › Save as PDF
     </button>
@@ -1506,7 +1586,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     </div>
 
         <div id="save-msg-su-cb" class="save-msg"></div>
-    <button class="save-btn" id="save-btn-su-cb" onclick="saveReport('su','cb')">Save follow-up to Airtable</button>
+    <button class="save-btn" id="save-btn-su-cb" onclick="event.stopPropagation();saveReport('su','cb')">Save follow-up to Airtable</button>
 <button class="print-btn" onclick="window.print()">
       Print / Export as PDF &nbsp;→&nbsp; File › Print › Save as PDF
     </button>
@@ -1536,8 +1616,13 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     <div class="score-sep"></div>
     <div class="score-mini"><div class="score-mini-label">Intelligence</div><div class="score-mini-val"><span id="sc-intel-w">0</span><span class="score-mini-max">/10</span></div><div class="score-mini-bar"><div class="score-mini-fill" id="bar-intel-w" style="width:0%;background:#3C3489"></div></div></div>
     <div class="score-sep"></div>
-    <div class="score-mini"><div class="score-mini-label">Character</div><div class="score-mini-val"><span id="sc-char-w">0</span><span class="score-mini-max">/10</span></div><div class="score-mini-bar"><div class="score-mini-fill" id="bar-char-w" style="width:0%;background:#8B1A4A"></div></div></div>
-    <div class="score-total-block"><div class="score-total-label">Score global</div><div class="score-total-val" id="sc-total-w">0<span style="font-size:16px;opacity:0.5">/100</span></div></div>
+    <div class="score-mini"><div class="score-mini-label">Character</div><div class="score-mini-val"><span id="sc-char-w">0</span><span class="score-mini-max">/5</span></div><div class="score-mini-bar"><div class="score-mini-fill" id="bar-char-w" style="width:0%;background:#8B1A4A"></div></div></div>
+    <div class="score-sep"></div>
+    <div class="score-mini"><div class="score-mini-label">Market</div><div class="score-mini-val"><span id="sc-mkt-w">0</span><span class="score-mini-max">/5</span></div><div class="score-mini-bar"><div class="score-mini-fill" id="bar-mkt-w" style="width:0%;background:#993C1D"></div></div></div>
+    <div class="score-total-block">
+      <div class="score-total-label">Score global</div>
+      <div class="score-total-val" id="sc-total-w">0<span style="font-size:16px;opacity:0.5">/100</span></div>
+    </div>
   </div>
 
   <div class="verdict-band" id="verdict-band-w" style="background:#F5F4F1;color:#888">
@@ -1559,6 +1644,8 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
       <div class="id-field"><label>Strong foot</label><select id="f-foot-w"><option>Right</option><option>Left</option><option>Both</option></select></div>
       <div class="id-field" style="grid-column:span 2"><label>Nationality</label><input type="text" id="f-nat-w" placeholder="e.g. Brazilian"></div>
     </div>
+
+    
 
     <div class="eval-section sec-phys">
       <div class="eval-section-header"><span class="eval-section-title">Physical</span><span class="eval-section-pct">20 pts</span></div>
@@ -1601,11 +1688,34 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     </div>
 
     <div class="eval-section sec-char">
-      <div class="eval-section-header"><span class="eval-section-title">Character &amp; Consistency</span><span class="eval-section-pct">10 pts</span></div>
+      <div class="eval-section-header"><span class="eval-section-title">Character &amp; Consistency</span><span class="eval-section-pct">5 pts</span></div>
       <div class="criteria-row"><div><div class="criteria-name">Resilience after failure</div><div class="criteria-note">A winger fails often — how does he react after a missed dribble or poor choice?</div></div><div class="stars" id="stars-resilience-w"></div><div class="chip" id="chip-resilience-w">0/5</div></div>
       <div class="criteria-row"><div><div class="criteria-name">Consistency / Maturity in decision-making</div><div class="criteria-note">Consistency of intensity, managing overconfidence, discipline</div></div><div class="stars" id="stars-maturity-w"></div><div class="chip" id="chip-maturity-w">0/5</div></div>
       <div class="comment-row"><label>Comments — Character &amp; Consistency</label><textarea id="com-char-w" placeholder="Behaviour, attitude, handling difficult moments, maturity..."></textarea></div>
     </div>
+
+    <!-- POTENTIEL MARCHÉ W -->
+    <div class="eval-section sec-mkt-w">
+      <div class="eval-section-header">
+        <span class="eval-section-title">Market potential</span>
+        <span class="eval-section-pct">5 pts · Resale value</span>
+      </div>
+      <div class="criteria-row">
+        <div>
+          <div class="criteria-name">Progression potential</div>
+          <div class="criteria-note">Visible development potential over the next seasons</div>
+        </div>
+        <div class="stars" id="stars-prog-w"></div>
+        <div class="chip" id="chip-prog">0/5</div>
+      </div>
+      <div class="comment-row">
+        <label>Comments — Market potential</label>
+        <textarea id="com-mkt-w" placeholder="Contract context, estimated cost, agent, Transfermarkt link, Instagram..."></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:8px;border:1px solid var(--gray-border);border-radius:3px;overflow:hidden">
+        </div>
+      </div>
+    </div>
+
 
     <div class="section-block-title">Key signals — tick for this player</div>
     <div class="signals-grid">
@@ -1623,7 +1733,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
       <select id="advice-w"><option value="">— Select —</option><option>Priority recruitment</option><option>Monitor</option><option>Long-term watch</option><option>No interest</option></select>
     </div>
         <div id="save-msg-sc-w" class="save-msg"></div>
-    <button class="save-btn" id="save-btn-sc-w" onclick="saveReport('sc','w')">Save report to Airtable</button>
+    <button class="save-btn" id="save-btn-sc-w" onclick="event.stopPropagation();saveReport('sc','w')">Save report to Airtable</button>
 <button class="print-btn" onclick="window.print()">Print / Export as PDF &nbsp;→&nbsp; File › Print › Save as PDF</button>
   </div>
 </div>
@@ -1718,7 +1828,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
       </select>
     </div>
         <div id="save-msg-su-w" class="save-msg"></div>
-    <button class="save-btn" id="save-btn-su-w" onclick="saveReport('su','w')">Save follow-up to Airtable</button>
+    <button class="save-btn" id="save-btn-su-w" onclick="event.stopPropagation();saveReport('su','w')">Save follow-up to Airtable</button>
 <button class="print-btn" onclick="window.print()">Print / Export as PDF &nbsp;→&nbsp; File › Print › Save as PDF</button>
   </div>
 </div>
@@ -1729,7 +1839,7 @@ var selectedPoste=null,selectedType=null;
 function selectPoste(p){document.querySelectorAll('.poste-card:not(.disabled)').forEach(function(c){c.classList.remove('selected');});document.getElementById('card-'+p).classList.add('selected');selectedPoste=p;checkReady();}
 function selectType(t){document.querySelectorAll('.type-card').forEach(function(c){c.classList.remove('selected');});document.getElementById('card-'+t).classList.add('selected');selectedType=t;checkReady();}
 function checkReady(){var btn=document.getElementById('launch-btn');if(selectedPoste&&selectedType){btn.classList.add('ready');}else{btn.classList.remove('ready');}}
-function launch(){if(!selectedPoste||!selectedType)return;document.getElementById('home').style.display='none';var id='fiche-'+(selectedType==='init'?'sc':'su')+'-'+selectedPoste;document.getElementById(id).style.display='block';if(selectedPoste==='cb'&&selectedType==='init'){initScoutingCB();}else if(selectedPoste==='cb'&&selectedType==='suivi'){initSuiviCB();}else if(selectedPoste==='w'&&selectedType==='init'){initScoutingW();}else if(selectedPoste==='w'&&selectedType==='suivi'){initSuiviW();}window.scrollTo(0,0);}
+function launch(){if(!selectedPoste||!selectedType)return;document.getElementById('home').style.display='none';var id='fiche-'+(selectedType==='init'?'sc':'su')+'-'+selectedPoste;document.getElementById(id).style.display='block';if(selectedPoste==='cb'&&selectedType==='init'){initScoutingCB();}else if(selectedPoste==='cb'&&selectedType==='suivi'){initSuiviCB();setTimeout(function(){addAutocompleteToSuivi();},200);}else if(selectedPoste==='w'&&selectedType==='init'){initScoutingW();}else if(selectedPoste==='w'&&selectedType==='suivi'){initSuiviW();setTimeout(function(){addAutocompleteToSuivi();},200);}window.scrollTo(0,0);}
 function goHome(){
   ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){document.getElementById(id).style.display='none';});
   document.querySelectorAll('input,textarea').forEach(function(el){el.value='';});
@@ -1774,19 +1884,19 @@ function initScoutingCB(){for(var i=0;i<CRITERIA_CB.length;i++){ratingsCB[CRITER
 /* CB SUIVI */
 var POSITIFS_SU_CB=['Confirmation of initial qualities','Visible progression','Good level against adversity','Confirmed leadership','Better use of the ball','Intensity maintained 90 min'];
 var NEGATIFS_SU_CB=['Regression vs first visit','Match below expected level','Physical issues / injury','Concerning behaviour','Competition level too low','Doubts about mentality'];
-function setVerdictSuivi(prefix,val){var band=document.getElementById('verdict-band-'+prefix),dot=document.getElementById('verdict-dot-'+prefix),txt=document.getElementById('verdict-text-'+prefix);if(!band)return;if(val==='go'){band.style.background='#E6F1FB';band.style.color='#0C447C';dot.style.background='#185FA5';txt.textContent='Passer à l\'étape recrutement — Start the process';}else if(val==='continue'){band.style.background='#EAF3DE';band.style.color='#3B6D11';dot.style.background='#3B6D11';txt.textContent='Continue monitoring';}else if(val==='wait'){band.style.background='#FAEEDA';band.style.color='#854F0B';dot.style.background='#854F0B';txt.textContent='On hold — Reassess at end of season';}else if(val==='stop'){band.style.background='#FCEBEB';band.style.color='#A32D2D';dot.style.background='#A32D2D';txt.textContent='Stop monitoring';}else{band.style.background='#F5F4F1';band.style.color='#888';dot.style.background='#ccc';txt.textContent='Select a final verdict to get the result';}}
+function setVerdictSuivi(prefix,val){var band=document.getElementById('verdict-band-'+prefix),dot=document.getElementById('verdict-dot-'+prefix),txt=document.getElementById('verdict-text-'+prefix);if(!band)return;if(val==='go'){band.style.background='#E6F1FB';band.style.color='#0C447C';dot.style.background='#185FA5';txt.textContent='Move to recruitment stage — Start the process';}else if(val==='continue'){band.style.background='#EAF3DE';band.style.color='#3B6D11';dot.style.background='#3B6D11';txt.textContent='Continue monitoring';}else if(val==='wait'){band.style.background='#FAEEDA';band.style.color='#854F0B';dot.style.background='#854F0B';txt.textContent='On hold — Reassess at end of season';}else if(val==='stop'){band.style.background='#FCEBEB';band.style.color='#A32D2D';dot.style.background='#A32D2D';txt.textContent='Stop monitoring';}else{band.style.background='#F5F4F1';band.style.color='#888';dot.style.background='#ccc';txt.textContent='Select a final verdict to get the result';}}
 function updateVerdict(){var el=document.getElementById('advice-su-cb');if(el)setVerdictSuivi('su-cb',el.value);}
 function initSuiviCB(){var pl=document.getElementById('pos-list-su-cb');if(pl&&pl.children.length===0){makeSignalList(POSITIFS_SU_CB,'pos','pos-list-su-cb');makeSignalList(NEGATIFS_SU_CB,'neg','neg-list-su-cb');}}
 
 /* WINGER SCOUTING */
-var CRITERIA_W=[{k:'speed-w',cat:'phys',w:8,warn:true},{k:'tone-w',cat:'phys',w:7,warn:false},{k:'repeat-w',cat:'phys',w:5,warn:false},{k:'dribble-w',cat:'perc',w:9,warn:true},{k:'onetwo-w',cat:'perc',w:6,warn:false},{k:'pass-w',cat:'perc',w:5,warn:false},{k:'finish-w',cat:'perc',w:5,warn:false},{k:'project-w',cat:'trans',w:7,warn:false},{k:'press-w',cat:'trans',w:7,warn:false},{k:'recover-w',cat:'trans',w:6,warn:false},{k:'depth-w',cat:'noball',w:6,warn:false},{k:'avail-w',cat:'noball',w:5,warn:false},{k:'zone-w',cat:'noball',w:4,warn:false},{k:'read-w',cat:'intel',w:5,warn:false},{k:'decision-w',cat:'intel',w:5,warn:false},{k:'resilience-w',cat:'char',w:5,warn:false},{k:'maturity-w',cat:'char',w:5,warn:false}];
-var MAX_W={phys:20,perc:25,trans:20,noball:15,intel:10,char:10};
+var CRITERIA_W=[{k:'speed-w',cat:'phys',w:8,warn:true},{k:'tone-w',cat:'phys',w:7,warn:false},{k:'repeat-w',cat:'phys',w:5,warn:false},{k:'dribble-w',cat:'perc',w:9,warn:true},{k:'onetwo-w',cat:'perc',w:6,warn:false},{k:'pass-w',cat:'perc',w:5,warn:false},{k:'finish-w',cat:'perc',w:5,warn:false},{k:'project-w',cat:'trans',w:7,warn:false},{k:'press-w',cat:'trans',w:7,warn:false},{k:'recover-w',cat:'trans',w:6,warn:false},{k:'depth-w',cat:'noball',w:6,warn:false},{k:'avail-w',cat:'noball',w:5,warn:false},{k:'zone-w',cat:'noball',w:4,warn:false},{k:'read-w',cat:'intel',w:5,warn:false},{k:'decision-w',cat:'intel',w:5,warn:false},{k:'resilience-w',cat:'char',w:5,warn:false},{k:'maturity-w',cat:'char',w:5,warn:false},{k:'prog-w',cat:'mkt-w',w:5,warn:false}];
+var MAX_W={phys:20,perc:25,trans:20,noball:15,intel:10,char:5,'mkt-w':5};
 var POSITIFS_W=['Remarkable speed and explosiveness','Excellent 1v1 dribbler','Solid on the ball / good in duels','Fluid one-touch play','Effective runs in behind','Active pressing at ball loss','Good defensive recovery','Strong character / resilient after failure'];
 var NEGATIFS_W=['Inconsistent effort over 90 min','Too individual / ignores team play','Insufficient defensive recovery','Decision-making needs improvement','Overconfidence / unnecessary losses','Weak off the ball','Finishing needs improvement','Lack of maturity'];
 var QUESTIONS_W=['Can he beat his man in 1v1?','Does he run in behind off the ball?','Does he repeat high-intensity efforts?','Does he react well to ball loss?','Does he have a sellable profile?'];
 var ratingsW={};for(var i=0;i<CRITERIA_W.length;i++){ratingsW[CRITERIA_W[i].k]=0;}
 function buildStarsW(c){var el=document.getElementById('stars-'+c.k);if(!el)return;el.innerHTML='';for(var i=1;i<=5;i++){var s=document.createElement('div');s.className='star'+(c.warn?' warn':'')+(i<=ratingsW[c.k]?' active':'');s.textContent=i;(function(key,val,crit){s.onclick=function(){ratingsW[key]=val;buildStarsW(crit);updateScoresW();};})(c.k,i,c);el.appendChild(s);}}
-function updateScoresW(){var cats={phys:0,perc:0,trans:0,noball:0,intel:0,char:0};for(var i=0;i<CRITERIA_W.length;i++){cats[CRITERIA_W[i].cat]+=ratingsW[CRITERIA_W[i].k]*CRITERIA_W[i].w/5;}var total=0;for(var k in cats){total+=cats[k];}for(var k in MAX_W){var el=document.getElementById('sc-'+k+'-w');if(el)el.textContent=Math.round(cats[k]);var bar=document.getElementById('bar-'+k+'-w');if(bar)bar.style.width=Math.round(cats[k]/MAX_W[k]*100)+'%';}var tot=document.getElementById('sc-total-w');if(tot)tot.innerHTML=Math.round(total)+'<span style="font-size:16px;opacity:0.5">/100</span>';for(var i=0;i<CRITERIA_W.length;i++){var chip=document.getElementById('chip-'+CRITERIA_W[i].k);if(chip)chip.textContent=Math.round(ratingsW[CRITERIA_W[i].k]*CRITERIA_W[i].w/5)+'/'+CRITERIA_W[i].w;}setVerdict('verdict-band-w','verdict-dot-w','verdict-text-w',total);}
+function updateScoresW(){var cats={phys:0,perc:0,trans:0,noball:0,intel:0,char:0,'mkt-w':0};for(var i=0;i<CRITERIA_W.length;i++){cats[CRITERIA_W[i].cat]+=ratingsW[CRITERIA_W[i].k]*CRITERIA_W[i].w/5;}var total=0;for(var k in cats){total+=cats[k];}for(var k in MAX_W){var el=document.getElementById('sc-'+k+'-w');if(el)el.textContent=Math.round(cats[k]);var bar=document.getElementById('bar-'+k+'-w');if(bar)bar.style.width=Math.round(cats[k]/MAX_W[k]*100)+'%';}var tot=document.getElementById('sc-total-w');if(tot)tot.innerHTML=Math.round(total)+'<span style="font-size:16px;opacity:0.5">/100</span>';for(var i=0;i<CRITERIA_W.length;i++){var chip=document.getElementById('chip-'+CRITERIA_W[i].k);if(chip)chip.textContent=Math.round(ratingsW[CRITERIA_W[i].k]*CRITERIA_W[i].w/5)+'/'+CRITERIA_W[i].w;}setVerdict('verdict-band-w','verdict-dot-w','verdict-text-w',total);}
 function initScoutingW(){for(var i=0;i<CRITERIA_W.length;i++){ratingsW[CRITERIA_W[i].k]=0;buildStarsW(CRITERIA_W[i]);}updateScoresW();var pl=document.getElementById('pos-list-w');if(pl&&pl.children.length===0){makeSignalList(POSITIFS_W,'pos','pos-list-w');makeSignalList(NEGATIFS_W,'neg','neg-list-w');}makeQ5('q5-list-w',QUESTIONS_W);}
 
 /* WINGER SUIVI */
@@ -1801,7 +1911,7 @@ var AT_PLAYERS='tbldKjw6sqdXqz3DO';
 var AT_REPORTS='tblZSAXMwsgMRmMtd';
 var FP={name:'Name',position:'Position',dob:'Date of birth',nationality:'Nationality',height:'Height',strongFoot:'Strong foot',club:'Current club',status:'Status'};
 var FR={date:'Date',player:'Player',type:'Type',position:'Position scouted',scout:'Scout',match:'Match',score:'Global score',verdict:'Verdict',notes:'Notes'};
-var activeFilters={pos:'all',status:'all'};
+var activeFilters={pos:'all', year:'all', verdict:'all'};
 var allPlayers=[];
 
 function switchTab(tab,el){
@@ -1812,6 +1922,9 @@ function switchTab(tab,el){
   if(tab==='players'){
     loadPlayers();
     loadPlayersForAutocomplete();
+  } else if(tab==='reports'){
+    loadReports();
+  } else {
   }
 }
 
@@ -1830,7 +1943,43 @@ function loadPlayers(){
     .then(function(data){
       if(data.error){el.innerHTML='<div class="db-error">Error: '+data.error.message+'</div>';return;}
       allPlayers=data.records||[];
-      filterPlayers();
+      // Load last report dates
+      atFetch('GET',AT_BASE+'/'+AT_REPORTS+'?sort[0][field]=Date&sort[0][direction]=desc')
+        .then(function(rd){
+          window._lastReportDates={};
+          window._lastReportVerdicts={};
+          if(rd.records){
+            var vm={'go':'Move to recruitment stage','continue':'Continue monitoring','wait':'Put on hold','stop':'Stop monitoring'};
+            // Build a map of player → {date, verdict} keeping most recent
+            var playerBestReport={};
+            rd.records.forEach(function(r){
+              var pids=r.fields['Player']||[];
+              if(!pids.length) return;
+              var pid=pids[0];
+              var date=r.fields['Date']||'';
+              var verdict=r.fields['Verdict']||'';
+              var verdictText=vm[verdict]||verdict;
+              if(!verdictText) return;
+              var existing=playerBestReport[pid];
+              if(!existing){
+                playerBestReport[pid]={date:date,verdict:verdictText};
+              } else {
+                // Keep more recent date, or if same date keep follow-up over first obs
+                var isNewer = date && (!existing.date || date > existing.date);
+                var isSameDateFollowUp = date===existing.date && (r.fields['Type']||'').indexOf('Follow')!==-1;
+                if(isNewer||isSameDateFollowUp){
+                  playerBestReport[pid]={date:date,verdict:verdictText};
+                }
+              }
+            });
+            Object.keys(playerBestReport).forEach(function(pid){
+              window._lastReportDates[pid]=playerBestReport[pid].date;
+              window._lastReportVerdicts[pid]=playerBestReport[pid].verdict;
+            });
+          }
+          filterPlayers();
+        })
+        .catch(function(){ filterPlayers(); });
     })
     .catch(function(){el.innerHTML='<div class="db-error">Connection error.</div>';});
 }
@@ -1839,7 +1988,12 @@ function setFilter(type,value,btn){
   activeFilters[type]=value;
   btn.parentElement.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-  filterPlayers();
+  // If filtering by verdict and verdicts not yet loaded, reload players first
+  if(type==='verdict'&&value!=='all'&&(!window._lastReportVerdicts||!Object.keys(window._lastReportVerdicts).length)){
+    loadPlayers();
+  } else {
+    filterPlayers();
+  }
 }
 
 function filterPlayers(){
@@ -1848,7 +2002,24 @@ function filterPlayers(){
     var f=p.fields;
     if(q&&!(f[FP.name]||'').toLowerCase().includes(q)&&!(f[FP.position]||'').toLowerCase().includes(q)&&!(f[FP.club]||'').toLowerCase().includes(q))return false;
     if(activeFilters.pos!=='all'&&(f[FP.position]||'').toLowerCase()!==activeFilters.pos.toLowerCase())return false;
-    if(activeFilters.status!=='all'&&(f[FP.status]||'Monitoring')!==activeFilters.status)return false;
+    // Year of birth filter
+    if(activeFilters.year!=='all'){
+      var dob=f[FP.dob]||'';
+      // Format: DD/MM/YYYY or YYYY-MM-DD
+      var birthYear='';
+      if(dob.includes('/')) birthYear=dob.split('/')[2];
+      else if(dob.includes('-')) birthYear=dob.split('-')[0];
+      if(birthYear!==activeFilters.year) return false;
+    }
+    // Verdict filter
+    if(activeFilters.verdict!=='all'){
+      // Ensure _lastReportVerdicts exists
+      if(!window._lastReportVerdicts) return false;
+      var pVerdict=window._lastReportVerdicts[p.id]||'';
+      if(!pVerdict) return false; // no verdict recorded yet
+      if(pVerdict!==activeFilters.verdict) return false;
+    }
+
     return true;
   });
   var el=document.getElementById('db-content');
@@ -1861,11 +2032,27 @@ function filterPlayers(){
     var f=p.fields;
     var status=f[FP.status]||'Monitoring';
     var sc=status==='Recruited'?'status-recruited':status==='Rejected'?'status-rejected':'status-monitoring';
+    // Show last verdict if available
+    var lastVerdict=window._lastReportVerdicts&&window._lastReportVerdicts[p.id]?window._lastReportVerdicts[p.id]:'';
+    // Color badge based on verdict
+    if(lastVerdict){
+      var lv=lastVerdict.toLowerCase();
+      if(lv.includes('priority')||lv.includes('recruitment')||lv.includes('move')) sc='status-recruited';
+      else if(lv.includes('no interest')||lv.includes('stop')) sc='status-rejected';
+      else sc='status-monitoring';
+    }
     html+='<div class="player-card" id="pcard-'+p.id+'">';
     html+='<div style="display:flex;justify-content:space-between;align-items:center" onclick="toggleReports(\''+p.id+'\')">';
     html+='<div><div class="player-name">'+(f[FP.name]||'&mdash;')+'</div>';
-    html+='<div class="player-meta">'+(f[FP.position]||'')+(f[FP.position]&&f[FP.club]?' &middot; ':'')+(f[FP.club]||'')+(f[FP.nationality]?' &middot; ':'')+(f[FP.nationality]||'')+'</div></div>';
-    html+='<span class="player-status '+sc+'">'+status+'</span>';
+    var lastDate2=window._lastReportDates&&window._lastReportDates[p.id]?window._lastReportDates[p.id]:'';
+    var dob2=f[FP.dob]||'';
+    html+='<div class="player-meta">'
+      +(f[FP.position]||'')
+      +(f[FP.nationality]?' &middot; ':'')+(f[FP.nationality]||'')
+      +(dob2?' &middot; '+dob2:'')
+      +(lastDate2?' &middot; <span style="color:#1A6B6B">Last report: '+lastDate2+'</span>':'')
+      +'</div></div>';
+    html+='<span class="player-status '+sc+'">'+(lastVerdict||status)+'</span>';
     html+='</div>';
     html+='<div class="reports-panel" id="reports-'+p.id+'"><div class="db-loading">Loading reports...</div></div>';
     html+='</div>';
@@ -1981,7 +2168,10 @@ function captureFicheData(poste,type){
   return JSON.stringify(data);
 }
 
+var _savingInProgress = false;
 function saveReport(type,poste){
+  if(_savingInProgress) return;
+  _savingInProgress = true;
   var suffix=type+'-'+poste;
   var btn=document.getElementById('save-btn-'+suffix);
   var msg=document.getElementById('save-msg-'+suffix);
@@ -2038,14 +2228,19 @@ function saveReport(type,poste){
     })
     .then(function(result){
       if(result.id){
+        _savingInProgress = false;
         showSaveMsg(msg,'success','Report saved to Airtable!');
         var scoutVal = poste==='cb'?gv('f-scout'+(type==='su'?'-su-cb':'')):gv('f-scout'+(type==='su'?'-su-w':'-w'));
         addScoutToList(scoutVal);
+
+      } else {
+        _savingInProgress = false;
+        showSaveMsg(msg,'error','Error: '+(result.error?result.error.message:'Unknown'));
       }
-      else showSaveMsg(msg,'error','Error: '+(result.error?result.error.message:'Unknown'));
       btn.disabled=false;btn.textContent='Save to Airtable';
     })
     .catch(function(e){
+      _savingInProgress = false;
       showSaveMsg(msg,'error','Connection error. Please try again.');
       btn.disabled=false;btn.textContent='Save to Airtable';
     });
@@ -2142,14 +2337,77 @@ function populateFiche(data,poste,rtype,ficheId){
     if(advEl&&data.verdict) advEl.value=data.verdict;
 
   } else {
+    // Visit number
     if(data.visitNumber){
       var vn=data.visitNumber.replace('+','');
       var prefix=poste==='w'?'vw':'v';
       var vBtn=document.getElementById(prefix+vn);
       if(vBtn) vBtn.click();
     }
+    // Evol buttons
+    if(data.evolutions){
+      Object.keys(data.evolutions).forEach(function(catClass){
+        var evolText=data.evolutions[catClass];
+        document.querySelectorAll('#'+ficheId+' .cat-section').forEach(function(sec){
+          if(sec.className===catClass){
+            sec.querySelectorAll('.evol-btn').forEach(function(btn){
+              if(btn.textContent.trim()===evolText.trim()){
+                btn.classList.add('active');
+              }
+            });
+          }
+        });
+      });
+    }
+    // Confirm items
+    if(data.confirmed&&data.confirmed.length){
+      document.querySelectorAll('#'+ficheId+' .confirm-item').forEach(function(el){
+        var span=el.querySelector('span');
+        if(span&&data.confirmed.indexOf(span.textContent.trim())!==-1){
+          el.classList.add('confirmed');
+          var box=el.querySelector('.c-box');if(box)box.textContent='✓';
+        }
+      });
+    }
+    if(data.infirmed&&data.infirmed.length){
+      document.querySelectorAll('#'+ficheId+' .confirm-item').forEach(function(el){
+        var span=el.querySelector('span');
+        if(span&&data.infirmed.indexOf(span.textContent.trim())!==-1){
+          el.classList.add('infirmed');
+          var box=el.querySelector('.c-box');if(box)box.textContent='✗';
+        }
+      });
+    }
+    // Signals
+    var posId2='pos-list-su-'+poste;
+    var negId2='neg-list-su-'+poste;
+    document.querySelectorAll('#'+posId2+' .signal-item').forEach(function(el){
+      var span=el.querySelector('span');
+      if(span&&data.signals&&data.signals.pos.map(function(s){return s.trim();}).indexOf(span.textContent.trim())!==-1){
+        el.classList.add('on');var b=el.querySelector('.signal-box');if(b)b.textContent='✓';
+      }
+    });
+    document.querySelectorAll('#'+negId2+' .signal-item').forEach(function(el){
+      var span=el.querySelector('span');
+      if(span&&data.signals&&data.signals.neg.map(function(s){return s.trim();}).indexOf(span.textContent.trim())!==-1){
+        el.classList.add('on');var b=el.querySelector('.signal-box');if(b)b.textContent='✓';
+      }
+    });
+    // Comments
     if(data.comments){Object.keys(data.comments).forEach(function(id){var el=document.getElementById(id);if(el)el.value=data.comments[id]||'';});}
-    if(data.verdict){var adv=document.getElementById('advice-su-'+poste);if(adv){adv.value=data.verdict;if(poste==='cb')updateVerdict();else updateVerdictW();}}
+    // Verdict
+    if(data.verdict){
+      var adv=document.getElementById('advice-su-'+poste);
+      if(adv){
+        // Match by option text
+        for(var i=0;i<adv.options.length;i++){
+          if(adv.options[i].text===data.verdict||adv.options[i].value===data.verdict){
+            adv.selectedIndex=i; break;
+          }
+        }
+        if(poste==='cb')updateVerdict();else updateVerdictW();
+      }
+    }
   }
 
   // Change back button to return to Players tab
@@ -2159,8 +2417,8 @@ function populateFiche(data,poste,rtype,ficheId){
     backBtn.onclick=function(){
       goHome();
       setTimeout(function(){
-        var tab=document.querySelector('.home-tab:nth-child(2)');
-        switchTab('players',tab);
+        var tab=document.querySelector(".home-tab[onclick*='players']");
+      switchTab('players',tab);
       },50);
     };
   }
@@ -2188,15 +2446,21 @@ function returnToPlayers(){
   });
   var bar=document.getElementById('readonly-back-bar');
   if(bar) bar.remove();
-  // Restore all back buttons to goHome
   document.querySelectorAll('.back-btn').forEach(function(btn){
     btn.textContent='← Back to home';
     btn.onclick=function(){ goHome(); };
   });
+  var goToReports = window._returnToReportsTab;
+  window._returnToReportsTab = false;
   goHome();
   setTimeout(function(){
-    var tab=document.querySelector('.home-tab:nth-child(2)');
-    switchTab('players',tab);
+    if(goToReports){
+      var tab=document.querySelector(".home-tab[onclick*='reports']");
+      switchTab('reports',tab);
+    } else {
+      var tab=document.querySelector(".home-tab[onclick*='players']");
+      switchTab('players',tab);
+    }
   },50);
 }
 
@@ -2312,6 +2576,168 @@ function addAutocompleteToSuivi() {
 }
 
 window.addEventListener('load', function(){ loadPlayersForAutocomplete(); });
+
+// ── REPORTS TAB ──────────────────────────────────────────────
+var allReports = [];
+var reportFilters = {period:'week', type:'all', pos:'all', scout:'all'};
+
+function setReportPeriod(val, btn) {
+  reportFilters.period = val;
+  btn.parentElement.querySelectorAll('.period-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderReports();
+}
+function setReportType(val, btn) {
+  reportFilters.type = val;
+  btn.parentElement.querySelectorAll('.period-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderReports();
+}
+function setReportScout(val, btn) {
+  reportFilters.scout = val;
+  btn.parentElement.querySelectorAll('.period-btn:not([disabled])').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderReports();
+}
+function setReportPos(val, btn) {
+  reportFilters.pos = val;
+  btn.parentElement.querySelectorAll('.period-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderReports();
+}
+
+function loadReports() {
+  var el = document.getElementById('reports-list');
+  if(!el) return;
+  el.innerHTML = '<div class="db-loading">Loading reports...</div>';
+  atFetch('GET', AT_BASE+'/'+AT_REPORTS+'?sort[0][field]=Date&sort[0][direction]=desc')
+    .then(function(data){
+      if(data.error){el.innerHTML='<div class="db-error">Error: '+data.error.message+'</div>';return;}
+      allReports = data.records||[];
+      if(allPlayers.length===0){
+        atFetch('GET', AT_BASE+'/'+AT_PLAYERS+'?sort[0][field]=Name&sort[0][direction]=asc')
+          .then(function(pd){if(pd.records)populateDatalist(pd.records);renderReports();});
+      } else {
+        renderReports();
+      }
+    })
+    .catch(function(){el.innerHTML='<div class="db-error">Connection error.</div>';});
+}
+
+function getPlayerName(playerIds) {
+  if(!playerIds||!playerIds.length) return 'Unknown player';
+  var p = allPlayers.find(function(pl){return pl.id===playerIds[0];});
+  return p ? (p.fields[FP.name]||'Unknown') : 'Unknown player';
+}
+
+function renderReports() {
+  var now = new Date();
+  var filtered = allReports.filter(function(r){
+    var f = r.fields;
+    var date = f['Date']||'';
+    var type = f['Type']||'';
+    var pos  = f['Position scouted']||'';
+    if(reportFilters.period !== 'all' && date) {
+      var d = new Date(date);
+      if(reportFilters.period === 'week') {
+        var weekAgo = new Date(now); weekAgo.setDate(weekAgo.getDate()-7);
+        if(d < weekAgo) return false;
+      } else if(reportFilters.period === 'month') {
+        var monthAgo = new Date(now); monthAgo.setMonth(monthAgo.getMonth()-1);
+        if(d < monthAgo) return false;
+      }
+    }
+    if(reportFilters.type !== 'all' && type !== reportFilters.type) return false;
+    // Use player position for filtering, not position scouted
+    if(reportFilters.scout !== 'all') {
+      var sc2 = f['Scout']||'';
+      if(sc2.toLowerCase() !== reportFilters.scout.toLowerCase()) return false;
+    }
+    if(reportFilters.pos !== 'all') {
+      var playerIds2 = f['Player']||[];
+      var playerPos = '';
+      if(playerIds2.length) {
+        var pp = allPlayers.find(function(pl){return pl.id===playerIds2[0];});
+        if(pp) playerPos = (pp.fields[FP.position]||'').toLowerCase();
+      }
+      if(!playerPos) playerPos = pos.toLowerCase();
+      if(playerPos !== reportFilters.pos.toLowerCase()) return false;
+    }
+    return true;
+  });
+
+  var el = document.getElementById('reports-list');
+  var cnt = document.getElementById('reports-count');
+  if(!el) return;
+  if(cnt) cnt.textContent = filtered.length + ' report' + (filtered.length!==1?'s':'');
+
+  if(!filtered.length){
+    el.innerHTML='<div class="db-empty">No reports for this period.</div>';
+    return;
+  }
+
+  window._allReportsFiltered = filtered;
+  var html = '';
+  filtered.forEach(function(r, ri){
+    var f = r.fields;
+    var playerName = getPlayerName(f['Player']||[]);
+    var date    = f['Date']||'';
+    var type    = f['Type']||'';
+    var scout   = f['Scout']||'';
+    var pos     = f['Position scouted']||'';
+    var score   = f['Global score'];
+    var verdict = f['Verdict']||'';
+    var hasData = !!f['Full data'];
+    var scoreColor = score>=80?'#0C447C':score>=70?'#3B6D11':score>=60?'#854F0B':'#A32D2D';
+    html += '<div class="report-card" onclick="openReportFromList('+ri+')">';
+    html += '<div class="report-card-header">';
+    html += '<div><div class="report-card-player">'+playerName+'</div>';
+    var playerPos2 = '';
+    var pp2 = allPlayers.find(function(pl){return pl.id===(f['Player']&&f['Player'][0]);});
+    if(pp2) playerPos2 = pp2.fields[FP.position]||'';
+    html += '<div class="report-card-meta">'+date+(type?' &middot; <strong>'+type+'</strong>':'')+(playerPos2?' &middot; '+playerPos2:'')+(scout?' &middot; Scout: '+scout:'')+'</div></div>';
+    if(score!==undefined && type!=='Follow-up') html += '<div class="report-card-score" style="color:'+scoreColor+'">'+score+'<span style="font-size:12px;opacity:0.5">/100</span></div>';
+    html += '</div>';
+    var verdictMap={'go':'Move to recruitment stage','continue':'Continue monitoring','wait':'On hold','stop':'Stop monitoring'};
+    var verdictDisplay = verdictMap[verdict] || verdict;
+    if(verdictDisplay) html += '<div class="report-card-verdict">'+verdictDisplay+'</div>';
+    html += '<div style="margin-top:8px;text-align:center;background:var(--navy);color:var(--gold);border-radius:3px;padding:6px;font-family:Georgia,serif;font-size:12px">'+(hasData?'Open full report':'Open report')+'</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function openReportFromList(ri) {
+  var reports = window._allReportsFiltered;
+  if(!reports||!reports[ri]) return;
+  var r = reports[ri];
+  var f = r.fields;
+  var fullDataStr = f['Full data']||'';
+  var data = null;
+  if(fullDataStr){try{data=JSON.parse(fullDataStr);}catch(e){}}
+  if(!data){
+    document.getElementById('report-modal-title').textContent=(f['Type']||'')+(f['Date']?' · '+f['Date']:'')+(f['Scout']?' · '+f['Scout']:'');
+    document.getElementById('report-modal-body').innerHTML=buildFallback(f);
+    document.getElementById('report-modal').style.display='block';
+    document.body.style.overflow='hidden';
+    return;
+  }
+  var poste = data.poste||'cb';
+  var rtype = data.type||'sc';
+  var ficheId = 'fiche-'+rtype+'-'+poste;
+  document.getElementById('home').style.display='none';
+  ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){
+    document.getElementById(id).style.display='none';
+  });
+  document.getElementById(ficheId).style.display='block';
+  if(rtype==='sc'&&poste==='cb') initScoutingCB();
+  else if(rtype==='sc'&&poste==='w') initScoutingW();
+  else if(rtype==='su'&&poste==='cb') initSuiviCB();
+  else if(rtype==='su'&&poste==='w') initSuiviW();
+  setTimeout(function(){ populateFiche(data,poste,rtype,ficheId); },150);
+  window._returnToReportsTab = true;
+}
+
 </script>
 <div id="report-modal"><div class="report-modal-inner"><div class="report-modal-header"><span class="report-modal-title" id="report-modal-title">Report</span><button class="report-modal-close" onclick="closeReport()">&#x2715;</button></div><div id="report-modal-body" style="padding:1.5rem">Loading...</div><button class="modal-pdf-btn" onclick="window.print()">Print / Save as PDF</button></div></div>
 <datalist id="player-names-list"></datalist>
