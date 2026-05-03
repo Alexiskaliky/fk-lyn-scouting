@@ -2413,14 +2413,17 @@ function populateFiche(data,poste,rtype,ficheId){
   // Change back button to return to Players tab
   var backBtn=document.querySelector('#'+ficheId+' .back-btn');
   if(backBtn){
-    backBtn.textContent='← Back to Players';
-    backBtn.onclick=function(){
-      goHome();
-      setTimeout(function(){
-        var tab=document.querySelector(".home-tab[onclick*='players']");
-      switchTab('players',tab);
-      },50);
-    };
+    backBtn.textContent='← Back';
+    backBtn.onclick=function(){returnToPlayers();};
+    // Add print button next to back btn
+    var existingPrint=document.getElementById('ro-print-btn');
+    if(existingPrint) existingPrint.remove();
+    var printBtn=document.createElement('button');
+    printBtn.id='ro-print-btn';
+    printBtn.textContent='🖨 Print / Save PDF';
+    printBtn.style.cssText='margin-left:12px;padding:6px 14px;background:var(--navy);color:var(--gold);border:none;border-radius:4px;font-family:Georgia,serif;font-size:13px;cursor:pointer';
+    printBtn.onclick=function(){mobilePrint();};
+    backBtn.parentNode.insertBefore(printBtn, backBtn.nextSibling);
   }
 
   window.scrollTo(0,0);
@@ -2429,14 +2432,7 @@ function populateFiche(data,poste,rtype,ficheId){
   var ficheEl = document.getElementById(ficheId);
   if(ficheEl) ficheEl.classList.add('readonly-mode');
 
-  // Handle print cancel — use afterprint event to return to players
-  var _printHandler = function(){
-    window.removeEventListener('afterprint', _printHandler);
-    returnToPlayers();
-  };
-  window.addEventListener('afterprint', _printHandler);
-
-  setTimeout(function(){ window.print(); },400);
+  // Print button triggers mobilePrint() manually - no auto-print
 }
 
 function returnToPlayers(){
