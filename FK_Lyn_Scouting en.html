@@ -1903,9 +1903,9 @@ function toggleReports(playerId){
         html+='<div style="background:var(--white);border:1px solid var(--gray-border);border-radius:6px;padding:1rem;margin-bottom:8px;cursor:pointer" onclick="openReport(\''+playerId+'\','+ri+')">';
         html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
         html+='<div style="font-size:11px;font-family:Arial,sans-serif;color:var(--gray-text)">'+date+(type?' &middot; <strong>'+type+'</strong>':'')+'</div>';
-        html+='<div style="font-size:22px;font-weight:bold;color:'+col+';font-family:Arial,sans-serif">'+score+'<span style="font-size:12px;opacity:0.5">/100</span></div>';
+        if(type!=='Follow-up') html+='<div style="font-size:22px;font-weight:bold;color:'+col+';font-family:Arial,sans-serif">'+score+'<span style="font-size:12px;opacity:0.5">/100</span></div>';
         html+='</div>';
-        if(verdict)html+='<div style="font-size:12px;color:var(--text);margin-bottom:4px">'+verdict+'</div>';
+        html+='<div style="font-size:12px;color:'+(verdict?'var(--text)':'var(--gray-text)')+';margin-bottom:4px;font-style:'+(verdict?'normal':'italic')+'">'+( verdict||'No verdict selected')+'</div>';
         if(scout)html+='<div style="font-size:11px;color:var(--gray-text)">Scout: '+scout+(match?' &middot; '+match:'')+'</div>';
         else if(match)html+='<div style="font-size:11px;color:var(--gray-text)">'+match+'</div>';
         html+='<div style="margin-top:10px;text-align:center;background:var(--navy);color:var(--gold);border-radius:3px;padding:7px;font-family:Georgia,serif;font-size:12px">'+(hasData?'Open full report':'Open report')+'</div>';
@@ -2015,18 +2015,22 @@ function saveReport(type,poste){
         fields[FR.position]='Centre-back';
         var sc=gv('f-scout'+sfx)||gv('f-scout');if(sc)fields[FR.scout]=sc;
         var mt=gv('f-match'+sfx)||gv('f-match');if(mt)fields[FR.match]=mt;
-        var tot=document.getElementById('sc-total');fields[FR.score]=tot?(parseInt(tot.textContent)||0):0;
-        var adv=document.getElementById('advice');if(adv&&adv.value){var advOpt=adv.options[adv.selectedIndex];fields[FR.verdict]=advOpt?advOpt.text:adv.value;}
-        var nt=gv('notes');if(nt)fields[FR.notes]=nt;
+        if(type==='sc'){var tot=document.getElementById('sc-total');fields[FR.score]=tot?(parseInt(tot.textContent)||0):0;}
+        var advId=type==='su'?'advice-su-cb':'advice';
+        var adv=document.getElementById(advId);if(adv&&adv.value){var advOpt=adv.options[adv.selectedIndex];fields[FR.verdict]=advOpt?advOpt.text:adv.value;}
+        var ntId=type==='su'?'notes-su-cb':'notes';
+        var nt=gv(ntId);if(nt)fields[FR.notes]=nt;
       } else {
         var sfxw=type==='su'?'-su-w':'-w';
         var d=convertDate(gv('f-date'+sfxw)||gv('f-date-w'));if(d)fields[FR.date]=d;
         fields[FR.position]=gv('f-side-su-w')||gv('f-side-w')||'Winger';
         var sc=gv('f-scout'+sfxw)||gv('f-scout-w');if(sc)fields[FR.scout]=sc;
         var mt=gv('f-match'+sfxw)||gv('f-match-w');if(mt)fields[FR.match]=mt;
-        var tot=document.getElementById('sc-total-w');fields[FR.score]=tot?(parseInt(tot.textContent)||0):0;
-        var adv=document.getElementById('advice-su-w')||document.getElementById('advice-w');if(adv&&adv.value){var advOpt=adv.options[adv.selectedIndex];fields[FR.verdict]=advOpt?advOpt.text:adv.value;}
-        var nt=gv('notes-w');if(nt)fields[FR.notes]=nt;
+        if(type==='sc'){var tot=document.getElementById('sc-total-w');fields[FR.score]=tot?(parseInt(tot.textContent)||0):0;}
+        var advId2=type==='su'?'advice-su-w':'advice-w';
+        var adv=document.getElementById(advId2);if(adv&&adv.value){var advOpt=adv.options[adv.selectedIndex];fields[FR.verdict]=advOpt?advOpt.text:adv.value;}
+        var ntId2=type==='su'?'notes-su-w':'notes-w';
+        var nt=gv(ntId2);if(nt)fields[FR.notes]=nt;
       }
       fields['Full data']=captureFicheData(poste,type);
       Object.keys(fields).forEach(function(k){if(fields[k]===undefined||fields[k]==='')delete fields[k];});
@@ -2114,8 +2118,9 @@ function populateFiche(data,poste,rtype,ficheId){
 
     if(data.comments){Object.keys(data.comments).forEach(function(id){var el=document.getElementById(id);if(el)el.value=data.comments[id]||'';});}
 
-    var posId=poste==='w'?'pos-list-w':'pos-list';
-    var negId=poste==='w'?'neg-list-w':'neg-list';
+    // Signal IDs differ between scouting and suivi fiches
+    var posId = rtype==='sc' ? (poste==='w' ? 'pos-list-w' : 'pos-list') : ('pos-list-su-'+poste);
+    var negId = rtype==='sc' ? (poste==='w' ? 'neg-list-w' : 'neg-list') : ('neg-list-su-'+poste);
     document.querySelectorAll('#'+posId+' .signal-item').forEach(function(el){
       var span=el.querySelector('span');
       if(span&&data.signals&&data.signals.pos.map(function(s){return s.trim();}).indexOf(span.textContent.trim())!==-1){el.classList.add('on');var b=el.querySelector('.signal-box');if(b)b.textContent='✓';}
@@ -2125,8 +2130,10 @@ function populateFiche(data,poste,rtype,ficheId){
       if(span&&data.signals&&data.signals.neg.map(function(s){return s.trim();}).indexOf(span.textContent.trim())!==-1){el.classList.add('on');var b=el.querySelector('.signal-box');if(b)b.textContent='✓';}
     });
 
-    var q5Id=poste==='w'?'q5-list-w':'q5-list';
+        if(rtype==='sc'){
+      var q5Id=poste==='w'?'q5-list-w':'q5-list';
     if(data.questions){var qi=document.querySelectorAll('#'+q5Id+' .q-item');data.questions.forEach(function(q,i){if(qi[i]&&q.checked){qi[i].classList.add('checked');var b=qi[i].querySelector('.q-box');if(b)b.textContent='✓';}});}
+    }
 
     var nEl=document.getElementById('notes'+(poste==='w'?'-w':''));
     if(nEl&&data.generalNotes) nEl.value=data.generalNotes;
