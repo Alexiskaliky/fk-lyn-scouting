@@ -841,6 +841,14 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
 .readonly-mode .save-btn { display:none !important; }
 .readonly-mode .save-msg { display:none !important; }
 .readonly-mode .back-btn { display:none !important; }
+.readonly-mode input { pointer-events:none !important; background:transparent !important; border:none !important; border-bottom:1px solid var(--gray-border) !important; color:var(--text) !important; }
+.readonly-mode select { pointer-events:none !important; background:transparent !important; border:none !important; border-bottom:1px solid var(--gray-border) !important; color:var(--text) !important; -webkit-appearance:none; }
+.readonly-mode textarea { pointer-events:none !important; background:#FAFAFA !important; border:1px solid var(--gray-border) !important; color:var(--text) !important; resize:none !important; }
+.readonly-mode .star { pointer-events:none !important; cursor:default !important; }
+.readonly-mode .signal-item { pointer-events:none !important; cursor:default !important; }
+.readonly-mode .q5-item { pointer-events:none !important; cursor:default !important; }
+.readonly-mode .verdict-select { pointer-events:none !important; }
+.readonly-mode .print-btn { display:none !important; }
 .readonly-mode-back { display:inline-flex;align-items:center;gap:6px;padding:6px 14px;margin:0.75rem 2rem;background:var(--gray-bg);border:1px solid var(--gray-border);border-radius:3px;font-family:'Georgia',serif;font-size:12px;color:var(--gray-text);cursor:pointer;transition:all 0.15s; }
 .readonly-mode-back:hover{background:var(--white);border-color:var(--navy);color:var(--navy)}
 
