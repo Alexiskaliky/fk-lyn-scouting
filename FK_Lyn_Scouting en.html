@@ -29,7 +29,61 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
 #fiche-sc-cb,#fiche-su-cb,#fiche-sc-w,#fiche-su-w{display:none}
 .back-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;margin:0.75rem 2rem;background:var(--gray-bg);border:1px solid var(--gray-border);border-radius:3px;font-family:'Georgia',serif;font-size:12px;color:var(--gray-text);cursor:pointer;transition:all 0.15s}
 .back-btn:hover{background:var(--white);border-color:var(--navy);color:var(--navy)}
-@media print{.back-btn{display:none!important}}
+@media print{
+  .back-btn{display:none!important}
+  .print-btn{display:none!important}
+  #home{display:none!important}
+  .save-btn{display:none!important}
+  .save-msg{display:none!important}
+  #ro-print-btn{display:none!important}
+  #readonly-back-bar{display:none!important}
+
+
+  /* Show active fiche in print */
+  #fiche-sc-cb[style*="display: block"],
+  #fiche-sc-cb[style*="display:block"],
+  #fiche-su-cb[style*="display: block"],
+  #fiche-su-cb[style*="display:block"],
+  #fiche-sc-w[style*="display: block"],
+  #fiche-sc-w[style*="display:block"],
+  #fiche-su-w[style*="display: block"],
+  #fiche-su-w[style*="display:block"] {
+    display:block !important;
+  }
+  /* Fix textareas - show full content */
+  textarea {
+    height:auto !important;
+    max-height:none !important;
+    overflow:visible !important;
+    white-space:pre-wrap !important;
+    word-wrap:break-word !important;
+    resize:none !important;
+    border:1px solid #ccc !important;
+    background:transparent !important;
+    padding:4px !important;
+    font-family:inherit !important;
+    font-size:11px !important;
+    color:#000 !important;
+    display:block !important;
+    width:100% !important;
+    -webkit-print-color-adjust:exact !important;
+  }
+
+  /* Fix selects - hide and show value as text */
+  select {
+    -webkit-appearance:none !important;
+    appearance:none !important;
+    border:none !important;
+    background:transparent !important;
+    font-family:inherit !important;
+    font-size:inherit !important;
+    color:#000 !important;
+  }
+
+  /* Page break rules */
+  .eval-section { page-break-inside:avoid !important; }
+  .criteria-row { page-break-inside:avoid !important; }
+}
 
   :root {
     --navy:        #0D1B3E;
@@ -847,7 +901,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
 }
 .readonly-mode input { pointer-events:none !important; background:transparent !important; border:none !important; border-bottom:1px solid var(--gray-border) !important; color:var(--text) !important; }
 .readonly-mode select { pointer-events:none !important; background:transparent !important; border:none !important; border-bottom:1px solid var(--gray-border) !important; color:var(--text) !important; -webkit-appearance:none; }
-.readonly-mode textarea { pointer-events:none !important; background:#FAFAFA !important; border:1px solid var(--gray-border) !important; color:var(--text) !important; resize:none !important; }
+.readonly-mode textarea { pointer-events:none !important; background:#FAFAFA !important; border:1px solid var(--gray-border) !important; color:var(--text) !important; resize:none !important; overflow:hidden !important; height:auto !important; min-height:80px !important; }
 .readonly-mode .star { pointer-events:none !important; cursor:default !important; }
 .readonly-mode label { pointer-events:none !important; cursor:default !important; }
 .readonly-mode input[type="checkbox"] { pointer-events:none !important; cursor:default !important; }
@@ -2782,7 +2836,53 @@ function openReportFromList(ri) {
 }
 
 
+
+// Desktop print fix - handle select elements
+window.addEventListener('beforeprint', function(){
+  document.querySelectorAll('select').forEach(function(sel){
+    var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+    if(val && val !== '— Select —'){
+      sel.setAttribute('data-print-val', val);
+      var span = document.createElement('span');
+      span.className = 'print-select-val';
+      span.textContent = val;
+      span.style.cssText = 'font-weight:bold;color:#000';
+      sel.parentNode.insertBefore(span, sel.nextSibling);
+      sel.style.visibility = 'hidden';
+      sel.style.position = 'absolute';
+    }
+  });
+  // Auto-expand textareas
+  document.querySelectorAll('textarea').forEach(function(ta){
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  });
+});
+window.addEventListener('afterprint', function(){
+  document.querySelectorAll('.print-select-val').forEach(function(s){ s.remove(); });
+  document.querySelectorAll('select').forEach(function(sel){
+    sel.style.visibility = '';
+    sel.style.position = '';
+  });
+});
+
 function mobilePrint(){
+  // Fix selects - temporarily replace with spans showing selected value
+  var selects = document.querySelectorAll('select');
+  var selectData = [];
+  selects.forEach(function(sel){
+    var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+    if(val && val !== '— Select —') {
+      var span = document.createElement('span');
+      span.className = 'print-select-val';
+      span.textContent = val;
+      span.style.cssText = 'font-family:inherit;font-size:inherit;color:#000;font-weight:bold';
+      sel.parentNode.insertBefore(span, sel);
+      sel.style.display = 'none';
+      selectData.push({sel:sel, span:span});
+    }
+  });
+
   var printStyle = document.createElement('style');
   printStyle.id = 'mobile-print-style';
   printStyle.innerHTML = '@media print{'
@@ -2806,6 +2906,11 @@ function mobilePrint(){
   setTimeout(function(){
     var s=document.getElementById('mobile-print-style');
     if(s)s.remove();
+    // Restore selects
+    selectData.forEach(function(d){
+      d.sel.style.display='';
+      if(d.span.parentNode) d.span.parentNode.removeChild(d.span);
+    });
   },1000);
 }
 </script>
