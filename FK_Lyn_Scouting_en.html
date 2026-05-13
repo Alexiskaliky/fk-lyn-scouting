@@ -38,7 +38,6 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
   #ro-print-btn{display:none!important}
   #readonly-back-bar{display:none!important}
 
-
   /* Show active fiche in print */
   #fiche-sc-cb[style*="display: block"],
   #fiche-sc-cb[style*="display:block"],
@@ -50,11 +49,11 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
   #fiche-su-w[style*="display:block"] {
     display:block !important;
   }
-  /* Fix textareas - show full content */
+  /* Textareas - affichage complet */
   textarea {
     height:auto !important;
     max-height:none !important;
-    overflow:hidden !important;
+    overflow:visible !important;
     white-space:pre-wrap !important;
     word-wrap:break-word !important;
     resize:none !important;
@@ -68,16 +67,15 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     width:100% !important;
     -webkit-print-color-adjust:exact !important;
   }
-
-  /* Fix selects - hide and show value as text */
-  select {
-    -webkit-appearance:none !important;
-    appearance:none !important;
-    border:none !important;
-    background:transparent !important;
-    font-family:inherit !important;
-    font-size:inherit !important;
+  /* Selects - masquer et remplacer par input readonly via JS */
+  select { display:none !important; }
+  .print-select-val {
+    display:block !important;
+    font-weight:bold !important;
     color:#000 !important;
+    font-family:Georgia,serif !important;
+    font-size:13px !important;
+    width:100% !important;
   }
 
   /* Page break rules */
@@ -369,7 +367,8 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     .star { border: 1px solid #ccc; }
     .star.active { background: #333 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .eval-section-header, .score-bar, .doc-header, .verdict-band, .sub-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    input, textarea, select { color: #000 !important; }
+    input { color: #000 !important; }
+    textarea { display:none !important; }
   }
 
 
@@ -720,7 +719,8 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
     .page { max-width: 100%; box-shadow: none; }
     .print-btn { display: none; }
     .cat-header, .doc-header, .verdict-band { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    input, textarea, select { color: #000 !important; }
+    input { color: #000 !important; }
+    textarea { display:none !important; }
   }
 
 
@@ -812,7 +812,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
   .section-block-title{font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-text);margin-bottom:8px;margin-top:1.25rem;padding-bottom:4px;border-bottom:1px solid var(--gray-border)}
   .print-btn{display:block;width:100%;padding:12px;background:var(--navy);color:var(--gold);border:none;border-radius:3px;font-family:'Georgia',serif;font-size:14px;letter-spacing:0.04em;cursor:pointer;margin-bottom:1rem;transition:opacity 0.2s}
   .print-btn:hover{opacity:0.85}
-  @media print{body{background:white;font-size:12px}.page{max-width:100%}.print-btn{display:none}.star.active{background:#333!important;color:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.eval-section-header,.score-bar,.doc-header,.verdict-band{-webkit-print-color-adjust:exact;print-color-adjust:exact}input,textarea,select{color:#000!important}}
+  @media print{body{background:white;font-size:12px}.page{max-width:100%}.print-btn{display:none}.star.active{background:#333!important;color:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.eval-section-header,.score-bar,.doc-header,.verdict-band{-webkit-print-color-adjust:exact;print-color-adjust:exact}input{color:#000!important}textarea{display:none!important}}
 
 
   :root{--navy:#0D1B3E;--gold:#E8AF2A;--blue-dark:#0C447C;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--green-dark:#3B6D11;--green-light:#EAF3DE;--green-mid:#C0DD97;--amber-dark:#854F0B;--amber-light:#FAEEDA;--red-dark:#A32D2D;--red-light:#FCEBEB;--red-mid:#F7C1C1;--purple-dark:#3C3489;--teal-dark:#1A6B6B;--teal-light:#E0F4F4;--teal-mid:#9ED8D8;--orange-dark:#C45A00;--rose-dark:#8B1A4A;--gray-bg:#F5F4F1;--gray-border:#D3D1C7;--gray-text:#5F5E5A;--white:#FFFFFF;--text:#1A1A2E}
@@ -888,7 +888,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
   .section-block-title{font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-text);margin-bottom:8px;margin-top:1.25rem;padding-bottom:4px;border-bottom:1px solid var(--gray-border)}
   .print-btn{display:block;width:100%;padding:12px;background:var(--navy);color:var(--gold);border:none;border-radius:3px;font-family:'Georgia',serif;font-size:14px;cursor:pointer;margin-bottom:1rem;transition:opacity 0.2s}
   .print-btn:hover{opacity:0.85}
-  @media print{body{background:white}.page{max-width:100%}.print-btn{display:none}.cat-header,.doc-header,.verdict-band{-webkit-print-color-adjust:exact;print-color-adjust:exact}input,textarea{color:#000!important}}
+  @media print{body{background:white}.page{max-width:100%}.print-btn{display:none}.cat-header,.doc-header,.verdict-band{-webkit-print-color-adjust:exact;print-color-adjust:exact}input{color:#000!important}textarea{display:none!important}}
 
 .home-tabs{display:flex;border-bottom:2px solid var(--gray-border);margin-bottom:0}.home-tab{padding:10px 20px;font-family:'Georgia',serif;font-size:13px;color:var(--gray-text);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.15s}.home-tab:hover{color:var(--navy)}.home-tab.active{color:var(--navy);border-bottom-color:var(--navy);font-weight:bold}.tab-panel{display:none}.tab-panel.active{display:block}.db-search{width:100%;padding:10px 14px;border:1px solid var(--gray-border);border-radius:6px;font-family:'Georgia',serif;font-size:14px;color:var(--text);background:var(--white);outline:none;margin-bottom:1rem}.db-search:focus{border-color:var(--navy)}.db-filters{margin-bottom:1rem;display:flex;flex-direction:column;gap:8px}.filter-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.filter-label{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-text);min-width:55px;flex-shrink:0}.filter-btns{display:flex;gap:5px;flex-wrap:wrap}.filter-btn{padding:4px 12px;border:1px solid var(--gray-border);border-radius:20px;background:var(--white);font-family:'Georgia',serif;font-size:12px;color:var(--gray-text);cursor:pointer;transition:all 0.15s}.filter-btn:hover{border-color:var(--navy);color:var(--navy)}.filter-btn.active{background:var(--navy);border-color:var(--navy);color:var(--white)}.db-stats{font-size:11px;color:var(--gray-text);margin-bottom:8px;font-style:italic}.db-loading{text-align:center;padding:2rem;color:var(--gray-text);font-style:italic;font-size:13px}.db-error{background:#FCEBEB;border:1px solid #F7C1C1;border-radius:6px;padding:1rem;color:#A32D2D;font-size:13px;margin-bottom:1rem}.db-empty{text-align:center;padding:2rem;color:var(--gray-text);font-size:13px;font-style:italic}.player-card{background:var(--white);border:1px solid var(--gray-border);border-radius:6px;padding:1rem;margin-bottom:8px;cursor:pointer;transition:all 0.15s}.player-card:hover{border-color:var(--navy);background:#F8F9FF}.player-name{font-size:14px;font-weight:bold;color:var(--text)}.player-meta{font-size:12px;color:var(--gray-text);margin-top:3px}.player-status{font-size:11px;padding:2px 8px;border-radius:10px;font-family:Arial,sans-serif;font-weight:bold}.status-monitoring{background:#FAEEDA;color:#854F0B}.status-recruited{background:#EAF3DE;color:#3B6D11}.status-rejected{background:#FCEBEB;color:#A32D2D}.reports-panel{display:none;margin-top:8px;border-top:1px solid var(--gray-border);padding-top:8px}.add-player-btn{width:100%;padding:10px;background:var(--navy);color:var(--gold);border:none;border-radius:4px;font-family:'Georgia',serif;font-size:13px;cursor:pointer;margin-top:8px;transition:opacity 0.2s}.add-player-btn:hover{opacity:0.85}.save-btn{display:block;width:100%;padding:12px;background:#3B6D11;color:#fff;border:none;border-radius:3px;font-family:'Georgia',serif;font-size:14px;cursor:pointer;margin-bottom:0.5rem;transition:opacity 0.2s}.save-btn:hover{opacity:0.85}.save-btn:disabled{opacity:0.5;cursor:not-allowed}.save-msg{text-align:center;font-size:13px;padding:8px;border-radius:3px;margin-bottom:0.5rem;display:none}.save-msg.success{background:#EAF3DE;color:#3B6D11}.save-msg.error{background:#FCEBEB;color:#A32D2D}#report-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;overflow-y:auto;padding:2rem 1rem}.report-modal-inner{background:var(--white);max-width:800px;margin:0 auto;border-radius:6px;overflow:hidden}.report-modal-header{background:var(--navy);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center}.report-modal-title{color:var(--white);font-size:16px;font-weight:normal}.report-modal-close{background:none;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;padding:4px 8px}.report-modal-close:hover{color:var(--white)}.modal-pdf-btn{display:block;width:calc(100% - 3rem);margin:0 1.5rem 1.5rem;padding:12px;background:var(--navy);color:var(--gold);border:none;border-radius:3px;font-family:'Georgia',serif;font-size:14px;cursor:pointer;text-align:center}@media print{#report-modal{position:relative;background:none;padding:0}#report-modal .report-modal-close,#report-modal .modal-pdf-btn{display:none!important}.report-modal-inner{box-shadow:none}.save-btn,.save-msg,.back-btn{display:none!important}}
 
@@ -1863,42 +1863,42 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
       <div class="cat-header"><span class="cat-title">Physical</span></div>
       <div class="evol-row"><span class="evol-label">Progress</span><div class="evol-btn up" onclick="setEvol(this)">↑ Progression</div><div class="evol-btn eq" onclick="setEvol(this)">= Stable</div><div class="evol-btn down" onclick="setEvol(this)">↓ Regression</div><div class="evol-btn na" onclick="setEvol(this)">— Not assessed</div></div>
       <div class="confirm-row"><div class="confirm-label">Points to confirm</div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Speed / explosiveness</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Solidity on the ball</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Repeated efforts 90 min</span></div></div>
-      <div class="cat-text"><label>Observations — Physical</label><textarea placeholder="Speed, explosiveness, solidity in duels, endurance..."></textarea></div>
+      <div class="cat-text"><label>Observations — Physical</label><textarea id="com-phys-su-w" placeholder="Speed, explosiveness, solidity in duels, endurance..."></textarea></div>
     </div>
 
     <div class="cat-section cat-perc">
       <div class="cat-header"><span class="cat-title">Percussion &amp; Creation</span></div>
       <div class="evol-row"><span class="evol-label">Progress</span><div class="evol-btn up" onclick="setEvol(this)">↑ Progression</div><div class="evol-btn eq" onclick="setEvol(this)">= Stable</div><div class="evol-btn down" onclick="setEvol(this)">↓ Regression</div><div class="evol-btn na" onclick="setEvol(this)">— Not assessed</div></div>
       <div class="confirm-row"><div class="confirm-label">Points to confirm</div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Dribbling / 1v1</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>One-touch play</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Finishing / final pass</span></div></div>
-      <div class="cat-text"><label>Observations — Percussion &amp; Creation</label><textarea placeholder="Dribbling, percussion, quick play, finishing..."></textarea></div>
+      <div class="cat-text"><label>Observations — Percussion &amp; Creation</label><textarea id="com-perc-su-w" placeholder="Dribbling, percussion, quick play, finishing..."></textarea></div>
     </div>
 
     <div class="cat-section cat-trans">
       <div class="cat-header"><span class="cat-title">Transitions &amp; Pressing</span></div>
       <div class="evol-row"><span class="evol-label">Progress</span><div class="evol-btn up" onclick="setEvol(this)">↑ Progression</div><div class="evol-btn eq" onclick="setEvol(this)">= Stable</div><div class="evol-btn down" onclick="setEvol(this)">↓ Regression</div><div class="evol-btn na" onclick="setEvol(this)">— Not assessed</div></div>
       <div class="confirm-row"><div class="confirm-label">Points to confirm</div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Pressing at loss</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Defensive recovery</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Forward projection</span></div></div>
-      <div class="cat-text"><label>Observations — Transitions &amp; Pressing</label><textarea placeholder="Counter-attacks, pressing, recovery, support to full-backs..."></textarea></div>
+      <div class="cat-text"><label>Observations — Transitions &amp; Pressing</label><textarea id="com-trans-su-w" placeholder="Counter-attacks, pressing, recovery, support to full-backs..."></textarea></div>
     </div>
 
     <div class="cat-section cat-noball">
       <div class="cat-header"><span class="cat-title">Off-ball movement</span></div>
       <div class="evol-row"><span class="evol-label">Progress</span><div class="evol-btn up" onclick="setEvol(this)">↑ Progression</div><div class="evol-btn eq" onclick="setEvol(this)">= Stable</div><div class="evol-btn down" onclick="setEvol(this)">↓ Regression</div><div class="evol-btn na" onclick="setEvol(this)">— Not assessed</div></div>
       <div class="confirm-row"><div class="confirm-label">Points to confirm</div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Runs in behind</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Availability / off-ball runs</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Drifting inside</span></div></div>
-      <div class="cat-text"><label>Observations — Off-ball movement</label><textarea placeholder="Runs, off-ball movement, positioning, availability..."></textarea></div>
+      <div class="cat-text"><label>Observations — Off-ball movement</label><textarea id="com-noball-su-w" placeholder="Runs, off-ball movement, positioning, availability..."></textarea></div>
     </div>
 
     <div class="cat-section cat-intel">
       <div class="cat-header"><span class="cat-title">Game intelligence</span></div>
       <div class="evol-row"><span class="evol-label">Progress</span><div class="evol-btn up" onclick="setEvol(this)">↑ Progression</div><div class="evol-btn eq" onclick="setEvol(this)">= Stable</div><div class="evol-btn down" onclick="setEvol(this)">↓ Regression</div><div class="evol-btn na" onclick="setEvol(this)">— Not assessed</div></div>
       <div class="confirm-row"><div class="confirm-label">Points to confirm</div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Reading / timing</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Final third decision</span></div></div>
-      <div class="cat-text"><label>Observations — Game intelligence</label><textarea placeholder="Reading, timing, choice between dribble / pass / shot..."></textarea></div>
+      <div class="cat-text"><label>Observations — Game intelligence</label><textarea id="com-intel-su-w" placeholder="Reading, timing, choice between dribble / pass / shot..."></textarea></div>
     </div>
 
     <div class="cat-section cat-char">
       <div class="cat-header"><span class="cat-title">Character &amp; Consistency</span></div>
       <div class="evol-row"><span class="evol-label">Progress</span><div class="evol-btn up" onclick="setEvol(this)">↑ Progression</div><div class="evol-btn eq" onclick="setEvol(this)">= Stable</div><div class="evol-btn down" onclick="setEvol(this)">↓ Regression</div><div class="evol-btn na" onclick="setEvol(this)">— Not assessed</div></div>
       <div class="confirm-row"><div class="confirm-label">Points to confirm</div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Resilience after failure</span></div><div class="confirm-item" onclick="cycleConfirm(this)"><div class="c-box"></div><span>Consistency / maturity</span></div></div>
-      <div class="cat-text"><label>Observations — Character &amp; Consistency</label><textarea placeholder="Behaviour, attitude, handling difficult moments..."></textarea></div>
+      <div class="cat-text"><label>Observations — Character &amp; Consistency</label><textarea id="com-char-su-w" placeholder="Behaviour, attitude, handling difficult moments..."></textarea></div>
     </div>
 
     <div class="section-block-title">Signals observed in this follow-up</div>
@@ -2269,7 +2269,7 @@ function saveReport(type,poste){
   var msg=document.getElementById('save-msg-'+suffix);
   btn.disabled=true;btn.textContent='Saving...';
   var playerName=type==='su'?(poste==='cb'?gv('f-name-su-cb'):gv('f-name-su-w')):(poste==='cb'?gv('f-name'):gv('f-name-w'));
-  if(!playerName.trim()){showSaveMsg(msg,'error','Please enter the player name first.');btn.disabled=false;btn.textContent='Save to Airtable';return;}
+  if(!playerName.trim()){showSaveMsg(msg,'error','Please enter the player name first.');btn.disabled=false;btn.textContent='Save to Airtable';_savingInProgress=false;return;}
   atFetch('GET',AT_BASE+'/'+AT_PLAYERS+'?filterByFormula='+encodeURIComponent('{Name}="'+playerName.trim()+'"'))
     .then(function(data){
       if(data.records&&data.records.length>0)return Promise.resolve(data.records[0].id);
@@ -2524,6 +2524,23 @@ function populateFiche(data,poste,rtype,ficheId){
   var ficheEl = document.getElementById(ficheId);
   if(ficheEl) ficheEl.classList.add('readonly-mode');
 
+  // Sur mobile : remplacer textareas par divs pour affichage complet
+  var _isMobileRO = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(_isMobileRO){
+    setTimeout(function(){
+      document.querySelectorAll('#'+ficheId+' textarea').forEach(function(ta){
+        if(ta.previousSibling && ta.previousSibling.className === 'ta-readonly') return;
+        var val = ta.value;
+        var div = document.createElement('div');
+        div.className = 'ta-readonly';
+        div.style.cssText = 'white-space:pre-wrap;word-wrap:break-word;font-family:Georgia,serif;font-size:13px;color:#333;border:1px solid #ccc;padding:6px 8px;min-height:52px;width:100%;box-sizing:border-box;background:#FAFAF8;border-radius:3px;';
+        div.textContent = val || '';
+        ta.parentNode.insertBefore(div, ta);
+        ta.style.display = 'none';
+      });
+    }, 150);
+  }
+
   // Auto-print on desktop only, not mobile
   var _isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   if(!_isMobile){
@@ -2537,6 +2554,11 @@ function populateFiche(data,poste,rtype,ficheId){
 }
 
 function returnToPlayers(){
+  // Restaurer les textareas cachées par ta-readonly
+  document.querySelectorAll('.ta-readonly').forEach(function(div){
+    if(div.nextSibling && div.nextSibling.tagName === 'TEXTAREA') div.nextSibling.style.display = '';
+    div.parentNode.removeChild(div);
+  });
   ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){
     var el=document.getElementById(id);
     if(el) el.classList.remove('readonly-mode');
@@ -2838,70 +2860,60 @@ function openReportFromList(ri) {
 
 
 // Desktop print fix - handle select elements
-window.addEventListener('beforeprint', function(){
-  document.querySelectorAll('select').forEach(function(sel){
-    var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
-    if(val && val !== '— Select —'){
-      sel.setAttribute('data-print-val', val);
-      var span = document.createElement('span');
-      span.className = 'print-select-val';
-      span.textContent = val;
-      span.style.cssText = 'font-weight:bold;color:#000';
-      sel.parentNode.insertBefore(span, sel.nextSibling);
-      sel.style.visibility = 'hidden';
-      sel.style.position = 'absolute';
-    }
-  });
-  // Auto-expand textareas - handled in mobilePrint after fiche is visible
-});
-window.addEventListener('afterprint', function(){
-  document.querySelectorAll('.print-select-val').forEach(function(s){ s.remove(); });
-  document.querySelectorAll('select').forEach(function(sel){
-    sel.style.visibility = '';
-    sel.style.position = '';
-  });
-});
-
-function mobilePrint(){
+function desktopPrint(){
+  var _isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(_isMobile){ mobilePrint(); return; }
   var ficheIds = ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'];
-
-  // Trouver la fiche active
   var activeFiche = null;
   ficheIds.forEach(function(id){
     var el = document.getElementById(id);
     if(el && el.style.display === 'block') activeFiche = id;
   });
   if(!activeFiche){ window.print(); return; }
-
-  // Sauvegarder etats
+  var ficheEl = document.getElementById(activeFiche);
   var home = document.getElementById('home');
   var modal = document.getElementById('report-modal');
-  var savedStates = {};
 
+  // Cacher home et autres fiches
   home.style.setProperty('display','none','important');
   if(modal) modal.style.setProperty('display','none','important');
-
   ficheIds.forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;
-    savedStates[id] = el.style.display;
-    if(id === activeFiche){
-      el.style.setProperty('display','block','important');
-    } else {
-      el.style.setProperty('display','none','important');
-    }
+    if(id !== activeFiche) el.style.setProperty('display','none','important');
+  });
+  document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg').forEach(function(b){
+    b.style.setProperty('display','none','important');
   });
 
-  var btns = document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg');
-  btns.forEach(function(b){ b.style.setProperty('display','none','important'); });
+  var taMap = [], selMap = [];
+  // Textareas
+  ficheEl.querySelectorAll('textarea').forEach(function(ta){
+    var val = ta.value;
+    if(!val) return;
+    var div = document.createElement('div');
+    div.className = 'ta-print';
+    div.style.cssText = 'white-space:pre-wrap;word-wrap:break-word;font-family:Georgia,serif;font-size:12px;color:#000;border:1px solid #ccc;padding:6px 8px;min-height:40px;width:100%;box-sizing:border-box;background:#fafafa;';
+    div.textContent = val;
+    ta.parentNode.insertBefore(div, ta);
+    ta.style.setProperty('display','none','important');
+    taMap.push({ta:ta, div:div});
+  });
+  // Selects
+  ficheEl.querySelectorAll('select').forEach(function(sel){
+    var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+    if(!val || val === '— Select —' || val === '—') return;
+    var inp = document.createElement('input');
+    inp.type = 'text'; inp.readOnly = true; inp.value = val;
+    inp.className = 'print-select-val';
+    inp.style.cssText = 'font-weight:bold;color:#000 !important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
+    sel.parentNode.replaceChild(inp, sel);
+    selMap.push({sel:sel, inp:inp});
+  });
 
-  // Activer readonly-mode sur la fiche active = textareas s'étendent automatiquement
-  var ficheEl = document.getElementById(activeFiche);
-  ficheEl.classList.add('readonly-mode');
+  window.print();
 
-  // Small delay to let browser render before printing
-  setTimeout(function(){ window.print(); }, 300);
-
+  // Restaurer
   setTimeout(function(){
     home.style.removeProperty('display');
     home.style.display = 'none';
@@ -2910,12 +2922,193 @@ function mobilePrint(){
       var el = document.getElementById(id);
       if(!el) return;
       el.style.removeProperty('display');
-      el.style.display = savedStates[id] || 'none';
+      el.style.display = id === activeFiche ? 'block' : 'none';
     });
-    btns.forEach(function(b){ b.style.removeProperty('display'); });
-    // Retirer readonly-mode
-    if(ficheEl) ficheEl.classList.remove('readonly-mode');
+    document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg').forEach(function(b){
+      b.style.removeProperty('display');
+    });
+    taMap.forEach(function(item){
+      item.ta.style.removeProperty('display');
+      if(item.div.parentNode) item.div.parentNode.removeChild(item.div);
+    });
+    selMap.forEach(function(item){
+      if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
+    });
   }, 1500);
+}
+
+var _printSelectMap = [];
+var _printTaMap = [];
+window.addEventListener('beforeprint', function(){
+  var _isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(_isMobile) return;
+  _printSelectMap = [];
+  _printTaMap = [];
+  // Textareas
+  document.querySelectorAll('textarea').forEach(function(ta){
+    if(ta.nextSibling && ta.nextSibling.className === 'ta-print') return;
+    var val = ta.value;
+    if(!val) return;
+    var div = document.createElement('div');
+    div.className = 'ta-print';
+    div.style.cssText = 'white-space:pre-wrap;word-wrap:break-word;font-family:Georgia,serif;font-size:12px;color:#000;border:1px solid #ccc;padding:6px 8px;min-height:40px;width:100%;box-sizing:border-box;background:#fafafa;';
+    div.textContent = val;
+    ta.parentNode.insertBefore(div, ta);
+    ta.style.setProperty('display', 'none', 'important');
+    _printTaMap.push({ta:ta, div:div});
+  });
+  // Selects
+  document.querySelectorAll('select').forEach(function(sel){
+    var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+    if(!val || val === '— Select —' || val === '—') return;
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.readOnly = true;
+    inp.value = val;
+    inp.className = 'print-select-val';
+    inp.style.cssText = 'font-weight:bold;color:#000 !important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
+    sel.parentNode.replaceChild(inp, sel);
+    _printSelectMap.push({sel:sel, inp:inp, parent:inp.parentNode});
+  });
+});
+window.addEventListener('afterprint', function(){
+  // Restaurer selects
+  _printSelectMap.forEach(function(item){
+    if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
+  });
+  _printSelectMap = [];
+  // Restaurer textareas
+  _printTaMap.forEach(function(item){
+    item.ta.style.display = '';
+    if(item.div.parentNode) item.div.parentNode.removeChild(item.div);
+  });
+  _printTaMap = [];
+});
+
+function mobilePrint(){
+  var _isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var ficheIds = ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'];
+  var activeFiche = null;
+  ficheIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el && el.style.display === 'block') activeFiche = id;
+  });
+  if(!activeFiche){ window.print(); return; }
+
+  // DESKTOP : CSS @media print gère les textareas, on gère juste selects + visibilité
+  if(!_isMobile){
+    var printStyle = document.createElement('style');
+    printStyle.id = 'dp-style';
+    var css = '#home{display:none!important}#report-modal{display:none!important}.back-btn,.print-btn,.save-btn,.save-msg{display:none!important}';
+    ficheIds.forEach(function(id){
+      if(id !== activeFiche) css += '#'+id+'{display:none!important}';
+    });
+    printStyle.innerHTML = css;
+    document.head.appendChild(printStyle);
+    var selMap = [];
+    document.getElementById(activeFiche).querySelectorAll('select').forEach(function(sel){
+      var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+      if(!val || val==='— Select —' || val==='—') return;
+      var inp = document.createElement('input');
+      inp.type='text'; inp.readOnly=true; inp.value=val; inp.className='print-select-val';
+      inp.style.cssText='font-weight:bold;color:#000!important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
+      sel.parentNode.replaceChild(inp, sel);
+      selMap.push({sel:sel,inp:inp});
+    });
+    setTimeout(function(){
+      window.print();
+      setTimeout(function(){
+        var s=document.getElementById('dp-style'); if(s)s.remove();
+        selMap.forEach(function(item){ if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel,item.inp); });
+      },1500);
+    }, 300);
+    return;
+  }
+
+  // MOBILE : créer ta-print car height:auto ne marche pas sur mobile
+  var ficheEl = document.getElementById(activeFiche);
+  var home = document.getElementById('home');
+  var modal = document.getElementById('report-modal');
+
+  // Sauvegarder valeurs
+  var savedValues = {};
+  ficheEl.querySelectorAll('input,textarea,select').forEach(function(el){
+    savedValues[el.id || Math.random()] = el.value;
+  });
+
+  // Cacher tout sauf la fiche active
+  home.style.cssText = 'display:none!important';
+  if(modal) modal.style.cssText = 'display:none!important';
+  ficheIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.style.cssText = id === activeFiche ? 'display:block!important' : 'display:none!important';
+  });
+  document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg').forEach(function(b){
+    b.style.cssText = 'display:none!important';
+  });
+
+  // Remplacer textareas par divs
+  // Sur mobile depuis Players, les valeurs sont dans ta-readonly
+  var taMap = [];
+  ficheEl.querySelectorAll('textarea').forEach(function(ta){
+    var val = ta.value;
+    var prev = ta.previousSibling;
+    if(!val && prev && prev.className === 'ta-readonly') val = prev.textContent;
+    if(prev && prev.className === 'ta-readonly') prev.style.display = 'none';
+    var div = document.createElement('div');
+    div.className = 'ta-print';
+    div.style.cssText = 'white-space:pre-wrap;word-wrap:break-word;font-family:Georgia,serif;font-size:12px;color:#000;border:1px solid #ccc;padding:6px 8px;min-height:40px;width:100%;box-sizing:border-box;background:#fafafa;display:block';
+    div.textContent = val;
+    ta.parentNode.insertBefore(div, ta);
+    ta.style.setProperty('display','none','important');
+    taMap.push({ta:ta, div:div});
+  });
+
+  // Remplacer selects par inputs readonly
+  var selMap = [];
+  ficheEl.querySelectorAll('select').forEach(function(sel){
+    var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+    if(val && val !== '— Select —' && val !== '—'){
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.readOnly = true;
+      inp.value = val;
+      inp.className = 'print-select-val';
+      inp.style.cssText = sel.style.cssText + ';font-weight:bold;color:#000 !important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
+      sel.parentNode.replaceChild(inp, sel);
+      selMap.push({sel:sel, inp:inp, parent:inp.parentNode});
+    }
+  });
+
+  ficheEl.classList.add('readonly-mode');
+
+  setTimeout(function(){
+    window.print();
+    setTimeout(function(){
+      // Restaurer
+      home.style.cssText = '';
+      home.style.display = 'none';
+      if(modal){ modal.style.cssText = ''; modal.style.display = 'none'; }
+      ficheIds.forEach(function(id){
+        var el = document.getElementById(id);
+        if(!el) return;
+        el.style.cssText = '';
+        el.style.display = id === activeFiche ? 'block' : 'none';
+      });
+      document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg').forEach(function(b){
+        b.style.cssText = '';
+      });
+      taMap.forEach(function(item){
+        item.ta.style.display = '';
+        if(item.div.parentNode) item.div.parentNode.removeChild(item.div);
+      });
+      selMap.forEach(function(item){
+        if(item.inp && item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
+      });
+      ficheEl.classList.remove('readonly-mode');
+    }, 2000);
+  }, 300);
 }
 </script>
 <div id="report-modal"><div class="report-modal-inner"><div class="report-modal-header"><span class="report-modal-title" id="report-modal-title">Report</span><button class="report-modal-close" onclick="closeReport()">&#x2715;</button></div><div id="report-modal-body" style="padding:1.5rem">Loading...</div><button class="modal-pdf-btn" onclick="window.print()">Print / Save as PDF</button></div></div>
