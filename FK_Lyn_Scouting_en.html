@@ -2988,6 +2988,7 @@ window.addEventListener('afterprint', function(){
 function mobilePrint(){
   var _isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   var ficheIds = ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'];
+
   var activeFiche = null;
   ficheIds.forEach(function(id){
     var el = document.getElementById(id);
@@ -2995,120 +2996,110 @@ function mobilePrint(){
   });
   if(!activeFiche){ window.print(); return; }
 
-  // DESKTOP : CSS @media print gère les textareas, on gère juste selects + visibilité
-  if(!_isMobile){
-    var printStyle = document.createElement('style');
-    printStyle.id = 'dp-style';
-    var css = '#home{display:none!important}#report-modal{display:none!important}.back-btn,.print-btn,.save-btn,.save-msg{display:none!important}';
-    ficheIds.forEach(function(id){
-      if(id !== activeFiche) css += '#'+id+'{display:none!important}';
+  var home = document.getElementById('home');
+  var modal = document.getElementById('report-modal');
+  var savedStates = {};
+
+  home.style.setProperty('display','none','important');
+  if(modal) modal.style.setProperty('display','none','important');
+
+  ficheIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    savedStates[id] = el.style.display;
+    if(id === activeFiche){
+      el.style.setProperty('display','block','important');
+    } else {
+      el.style.setProperty('display','none','important');
+    }
+  });
+
+  var btns = document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg');
+  btns.forEach(function(b){ b.style.setProperty('display','none','important'); });
+
+  var ficheEl = document.getElementById(activeFiche);
+
+  if(_isMobile){
+    // Mobile : remplacer textareas par divs + selects par inputs
+    // Récupérer valeurs depuis ta-readonly si présents
+    var taMap = [], selMap = [];
+    ficheEl.querySelectorAll('textarea').forEach(function(ta){
+      var val = ta.value;
+      var prev = ta.previousSibling;
+      if(!val && prev && prev.className === 'ta-readonly') val = prev.textContent;
+      if(prev && prev.className === 'ta-readonly') prev.style.display = 'none';
+      var div = document.createElement('div');
+      div.className = 'ta-print';
+      div.style.cssText = 'white-space:pre-wrap;word-wrap:break-word;font-family:Georgia,serif;font-size:12px;color:#000;border:1px solid #ccc;padding:6px 8px;min-height:40px;width:100%;box-sizing:border-box;background:#fafafa;display:block';
+      div.textContent = val;
+      ta.parentNode.insertBefore(div, ta);
+      ta.style.setProperty('display','none','important');
+      taMap.push({ta:ta, div:div});
     });
-    printStyle.innerHTML = css;
-    document.head.appendChild(printStyle);
-    var selMap = [];
-    document.getElementById(activeFiche).querySelectorAll('select').forEach(function(sel){
+    ficheEl.querySelectorAll('select').forEach(function(sel){
       var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
       if(!val || val==='— Select —' || val==='—') return;
       var inp = document.createElement('input');
       inp.type='text'; inp.readOnly=true; inp.value=val; inp.className='print-select-val';
-      inp.style.cssText='font-weight:bold;color:#000!important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
+      inp.style.cssText='font-weight:bold;color:#000 !important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
       sel.parentNode.replaceChild(inp, sel);
-      selMap.push({sel:sel,inp:inp});
+      selMap.push({sel:sel, inp:inp});
     });
+
+    setTimeout(function(){ window.print(); }, 300);
+
     setTimeout(function(){
-      window.print();
-      setTimeout(function(){
-        var s=document.getElementById('dp-style'); if(s)s.remove();
-        selMap.forEach(function(item){ if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel,item.inp); });
-      },1500);
-    }, 300);
-    return;
-  }
-
-  // MOBILE : créer ta-print car height:auto ne marche pas sur mobile
-  var ficheEl = document.getElementById(activeFiche);
-  var home = document.getElementById('home');
-  var modal = document.getElementById('report-modal');
-
-  // Sauvegarder valeurs
-  var savedValues = {};
-  ficheEl.querySelectorAll('input,textarea,select').forEach(function(el){
-    savedValues[el.id || Math.random()] = el.value;
-  });
-
-  // Cacher tout sauf la fiche active
-  home.style.cssText = 'display:none!important';
-  if(modal) modal.style.cssText = 'display:none!important';
-  ficheIds.forEach(function(id){
-    var el = document.getElementById(id);
-    if(!el) return;
-    el.style.cssText = id === activeFiche ? 'display:block!important' : 'display:none!important';
-  });
-  document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg').forEach(function(b){
-    b.style.cssText = 'display:none!important';
-  });
-
-  // Remplacer textareas par divs
-  // Sur mobile depuis Players, les valeurs sont dans ta-readonly
-  var taMap = [];
-  ficheEl.querySelectorAll('textarea').forEach(function(ta){
-    var val = ta.value;
-    var prev = ta.previousSibling;
-    if(!val && prev && prev.className === 'ta-readonly') val = prev.textContent;
-    if(prev && prev.className === 'ta-readonly') prev.style.display = 'none';
-    var div = document.createElement('div');
-    div.className = 'ta-print';
-    div.style.cssText = 'white-space:pre-wrap;word-wrap:break-word;font-family:Georgia,serif;font-size:12px;color:#000;border:1px solid #ccc;padding:6px 8px;min-height:40px;width:100%;box-sizing:border-box;background:#fafafa;display:block';
-    div.textContent = val;
-    ta.parentNode.insertBefore(div, ta);
-    ta.style.setProperty('display','none','important');
-    taMap.push({ta:ta, div:div});
-  });
-
-  // Remplacer selects par inputs readonly
-  var selMap = [];
-  ficheEl.querySelectorAll('select').forEach(function(sel){
-    var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
-    if(val && val !== '— Select —' && val !== '—'){
-      var inp = document.createElement('input');
-      inp.type = 'text';
-      inp.readOnly = true;
-      inp.value = val;
-      inp.className = 'print-select-val';
-      inp.style.cssText = sel.style.cssText + ';font-weight:bold;color:#000 !important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
-      sel.parentNode.replaceChild(inp, sel);
-      selMap.push({sel:sel, inp:inp, parent:inp.parentNode});
-    }
-  });
-
-  ficheEl.classList.add('readonly-mode');
-
-  setTimeout(function(){
-    window.print();
-    setTimeout(function(){
-      // Restaurer
-      home.style.cssText = '';
-      home.style.display = 'none';
-      if(modal){ modal.style.cssText = ''; modal.style.display = 'none'; }
+      home.style.removeProperty('display'); home.style.display = 'none';
+      if(modal){ modal.style.removeProperty('display'); modal.style.display = 'none'; }
       ficheIds.forEach(function(id){
         var el = document.getElementById(id);
         if(!el) return;
-        el.style.cssText = '';
-        el.style.display = id === activeFiche ? 'block' : 'none';
+        el.style.removeProperty('display');
+        el.style.display = savedStates[id] || 'none';
       });
-      document.querySelectorAll('.back-btn,.print-btn,.save-btn,.save-msg').forEach(function(b){
-        b.style.cssText = '';
-      });
+      btns.forEach(function(b){ b.style.removeProperty('display'); });
       taMap.forEach(function(item){
-        item.ta.style.display = '';
+        item.ta.style.removeProperty('display');
         if(item.div.parentNode) item.div.parentNode.removeChild(item.div);
       });
       selMap.forEach(function(item){
-        if(item.inp && item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
+        if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
+      });
+      ficheEl.querySelectorAll('.ta-readonly').forEach(function(d){ d.style.display = ''; });
+    }, 2000);
+
+  } else {
+    // Desktop : readonly-mode + selects remplacés par inputs
+    var selMap = [];
+    ficheEl.querySelectorAll('select').forEach(function(sel){
+      var val = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+      if(!val || val==='— Select —' || val==='—') return;
+      var inp = document.createElement('input');
+      inp.type='text'; inp.readOnly=true; inp.value=val; inp.className='print-select-val';
+      inp.style.cssText='font-weight:bold;color:#000 !important;border:none;border-bottom:1px solid #ccc;background:transparent;font-family:Georgia,serif;font-size:13px;width:100%;padding:4px 0;display:block;';
+      sel.parentNode.replaceChild(inp, sel);
+      selMap.push({sel:sel, inp:inp});
+    });
+    ficheEl.classList.add('readonly-mode');
+
+    setTimeout(function(){ window.print(); }, 300);
+
+    setTimeout(function(){
+      home.style.removeProperty('display'); home.style.display = 'none';
+      if(modal){ modal.style.removeProperty('display'); modal.style.display = 'none'; }
+      ficheIds.forEach(function(id){
+        var el = document.getElementById(id);
+        if(!el) return;
+        el.style.removeProperty('display');
+        el.style.display = savedStates[id] || 'none';
+      });
+      btns.forEach(function(b){ b.style.removeProperty('display'); });
+      selMap.forEach(function(item){
+        if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
       });
       ficheEl.classList.remove('readonly-mode');
-    }, 2000);
-  }, 300);
+    }, 1500);
+  }
 }
 </script>
 <div id="report-modal"><div class="report-modal-inner"><div class="report-modal-header"><span class="report-modal-title" id="report-modal-title">Report</span><button class="report-modal-close" onclick="closeReport()">&#x2715;</button></div><div id="report-modal-body" style="padding:1.5rem">Loading...</div><button class="modal-pdf-btn" onclick="window.print()">Print / Save as PDF</button></div></div>
