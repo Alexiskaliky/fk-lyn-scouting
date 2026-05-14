@@ -39,7 +39,14 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
   #readonly-back-bar{display:none!important}
 
   /* Show active fiche in print */
-  .fiche-active {
+  #fiche-sc-cb[style*="display: block"],
+  #fiche-sc-cb[style*="display:block"],
+  #fiche-su-cb[style*="display: block"],
+  #fiche-su-cb[style*="display:block"],
+  #fiche-sc-w[style*="display: block"],
+  #fiche-sc-w[style*="display:block"],
+  #fiche-su-w[style*="display: block"],
+  #fiche-su-w[style*="display:block"] {
     display:block !important;
   }
   /* Textareas - affichage complet */
@@ -805,7 +812,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--gray-bg);col
   .section-block-title{font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-text);margin-bottom:8px;margin-top:1.25rem;padding-bottom:4px;border-bottom:1px solid var(--gray-border)}
   .print-btn{display:block;width:100%;padding:12px;background:var(--navy);color:var(--gold);border:none;border-radius:3px;font-family:'Georgia',serif;font-size:14px;letter-spacing:0.04em;cursor:pointer;margin-bottom:1rem;transition:opacity 0.2s}
   .print-btn:hover{opacity:0.85}
-  @media print{body{background:white}.page{max-width:100%}.print-btn{display:none}.star.active{background:#333!important;color:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.eval-section-header,.score-bar,.doc-header,.verdict-band{-webkit-print-color-adjust:exact;print-color-adjust:exact}input{color:#000!important}textarea{display:none!important}}
+  @media print{body{background:white;font-size:12px}.page{max-width:100%}.print-btn{display:none}.star.active{background:#333!important;color:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.eval-section-header,.score-bar,.doc-header,.verdict-band{-webkit-print-color-adjust:exact;print-color-adjust:exact}input{color:#000!important}textarea{display:none!important}}
 
 
   :root{--navy:#0D1B3E;--gold:#E8AF2A;--blue-dark:#0C447C;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--green-dark:#3B6D11;--green-light:#EAF3DE;--green-mid:#C0DD97;--amber-dark:#854F0B;--amber-light:#FAEEDA;--red-dark:#A32D2D;--red-light:#FCEBEB;--red-mid:#F7C1C1;--purple-dark:#3C3489;--teal-dark:#1A6B6B;--teal-light:#E0F4F4;--teal-mid:#9ED8D8;--orange-dark:#C45A00;--rose-dark:#8B1A4A;--gray-bg:#F5F4F1;--gray-border:#D3D1C7;--gray-text:#5F5E5A;--white:#FFFFFF;--text:#1A1A2E}
@@ -1926,7 +1933,7 @@ function selectType(t){document.querySelectorAll('.type-card').forEach(function(
 function checkReady(){var btn=document.getElementById('launch-btn');if(selectedPoste&&selectedType){btn.classList.add('ready');}else{btn.classList.remove('ready');}}
 function launch(){if(!selectedPoste||!selectedType)return;document.getElementById('home').style.display='none';var id='fiche-'+(selectedType==='init'?'sc':'su')+'-'+selectedPoste;document.getElementById(id).style.display='block';if(selectedPoste==='cb'&&selectedType==='init'){initScoutingCB();}else if(selectedPoste==='cb'&&selectedType==='suivi'){initSuiviCB();setTimeout(function(){addAutocompleteToSuivi();},200);}else if(selectedPoste==='w'&&selectedType==='init'){initScoutingW();}else if(selectedPoste==='w'&&selectedType==='suivi'){initSuiviW();setTimeout(function(){addAutocompleteToSuivi();},200);}window.scrollTo(0,0);}
 function goHome(){
-  ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.display='none';el.classList.remove('fiche-active');}});
+  ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){document.getElementById(id).style.display='none';});
   document.querySelectorAll('input,textarea').forEach(function(el){el.value='';});
   for(var i=0;i<CRITERIA_CB.length;i++){ratingsCB[CRITERIA_CB[i].k]=0;buildStarsCB(CRITERIA_CB[i]);}
   for(var i=0;i<CRITERIA_W.length;i++){ratingsW[CRITERIA_W[i].k]=0;buildStarsW(CRITERIA_W[i]);}
@@ -2339,26 +2346,16 @@ function openReport(playerId,reportIdx){
   var fullDataStr=f['Full data']||'';
   var data=null;if(fullDataStr){try{data=JSON.parse(fullDataStr);}catch(e){}}
 
-  if(!data){
-    var date=f['Date']||'';var type=f['Type']||'';var scout=f['Scout']||'';
-    document.getElementById('report-modal-title').textContent=type+(date?' · '+date:'')+(scout?' · '+scout:'');
-    document.getElementById('report-modal-body').innerHTML=buildFallback(f);
-    document.getElementById('report-modal').style.display='block';
-    document.body.style.overflow='hidden';
-    return;
-  }
+  var poste = (data && data.poste) || 'cb';
+  var rtype = (data && data.type) || 'sc';
+  var ficheId = 'fiche-'+rtype+'-'+poste;
 
-  var poste=data.poste||'cb';
-  var rtype=data.type||'sc';
-  var ficheId='fiche-'+rtype+'-'+poste;
-
-  // Show the right fiche
+  // Toujours ouvrir en plein écran
   document.getElementById('home').style.display='none';
   ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){
     document.getElementById(id).style.display='none';
   });
   document.getElementById(ficheId).style.display='block';
-  document.getElementById(ficheId).classList.add('fiche-active');
 
   // Init fiche
   if(rtype==='sc'&&poste==='cb') initScoutingCB();
@@ -2828,22 +2825,14 @@ function openReportFromList(ri) {
   var fullDataStr = f['Full data']||'';
   var data = null;
   if(fullDataStr){try{data=JSON.parse(fullDataStr);}catch(e){}}
-  if(!data){
-    document.getElementById('report-modal-title').textContent=(f['Type']||'')+(f['Date']?' · '+f['Date']:'')+(f['Scout']?' · '+f['Scout']:'');
-    document.getElementById('report-modal-body').innerHTML=buildFallback(f);
-    document.getElementById('report-modal').style.display='block';
-    document.body.style.overflow='hidden';
-    return;
-  }
-  var poste = data.poste||'cb';
-  var rtype = data.type||'sc';
+  var poste = (data && data.poste) || 'cb';
+  var rtype = (data && data.type) || 'sc';
   var ficheId = 'fiche-'+rtype+'-'+poste;
   document.getElementById('home').style.display='none';
   ['fiche-sc-cb','fiche-su-cb','fiche-sc-w','fiche-su-w'].forEach(function(id){
     document.getElementById(id).style.display='none';
   });
   document.getElementById(ficheId).style.display='block';
-  document.getElementById(ficheId).classList.add('fiche-active');
   if(rtype==='sc'&&poste==='cb') initScoutingCB();
   else if(rtype==='sc'&&poste==='w') initScoutingW();
   else if(rtype==='su'&&poste==='cb') initSuiviCB();
@@ -3004,10 +2993,8 @@ function mobilePrint(){
     savedStates[id] = el.style.display;
     if(id === activeFiche){
       el.style.setProperty('display','block','important');
-      el.classList.add('fiche-active');
     } else {
       el.style.setProperty('display','none','important');
-      el.classList.remove('fiche-active');
     }
   });
 
@@ -3063,7 +3050,6 @@ function mobilePrint(){
         if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
       });
       ficheEl.querySelectorAll('.ta-readonly').forEach(function(d){ d.style.display = ''; });
-      ficheEl.classList.remove('fiche-active');
     }, 2000);
 
   } else {
@@ -3096,7 +3082,6 @@ function mobilePrint(){
         if(item.inp.parentNode) item.inp.parentNode.replaceChild(item.sel, item.inp);
       });
       ficheEl.classList.remove('readonly-mode');
-      ficheEl.classList.remove('fiche-active');
     }, 1500);
   }
 }
